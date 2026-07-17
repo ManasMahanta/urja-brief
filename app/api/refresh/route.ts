@@ -24,6 +24,7 @@ export async function GET(request: Request) {
   revalidatePath("/generation");
   revalidatePath("/storage");
   revalidatePath("/records");
+  revalidatePath("/ev");
   revalidatePath("/policy");
   revalidateTag("urja-power-brief", "max");
 

@@ -66,6 +66,10 @@ export const getPolicyHeadlines = (limit = 8) =>
 export const getStorageHeadlines = (limit = 8) =>
   getHeadlines('India ("battery energy storage" OR BESS OR "pumped storage" OR "energy storage tender") when:30d', limit);
 
+// EV-charging-scoped newswire: infrastructure, not car launches.
+export const getEvHeadlines = (limit = 8) =>
+  getHeadlines('India ("EV charging station" OR "charging infrastructure" OR "public charging") when:30d', limit);
+
 export const officialSources = [
   { name: "CEA Daily Generation Report", cadence: "Daily", href: "https://cea.nic.in/opm_grid_operation/daily-generation-report/?lang=en", detail: "All-India generation and fuel mix." },
   { name: "CEA Daily Renewable Generation", cadence: "Daily", href: "https://cea.nic.in/sitemap/?lang=en", detail: "Renewable generation reporting." },

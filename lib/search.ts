@@ -16,6 +16,7 @@ const STATIC_PAGES: SearchDoc[] = [
   { title: "Generation desk", snippet: "India's daily generation mix — thermal, hydro, nuclear, renewables — with sources and reporting dates.", url: "/generation", kind: "Page" },
   { title: "Storage desk", snippet: "Live storage despatch, pumped hydro vs grid batteries, and how to read a BESS tender.", url: "/storage", kind: "Page" },
   { title: "Records desk", snippet: "Observed records from 15-minute sampling: peak demand, highest renewable share, day-by-day log.", url: "/records", kind: "Page" },
+  { title: "EV charging desk", snippet: "Interactive 3D map of India's verifiable EV charging stations, with the coverage gap stated plainly.", url: "/ev", kind: "Page" },
   { title: "Policy desk", snippet: "CEA, Ministry of Power, and MNRE reporting with practical system impact.", url: "/policy", kind: "Page" },
   { title: "Power Glossary", snippet: "Plain-English definitions of the terms behind India's power system.", url: "/glossary", kind: "Page" },
   { title: "Methodology", snippet: "How Urja Brief separates official reporting, market context, and interpretation.", url: "/methodology", kind: "Page" },

@@ -112,6 +112,20 @@ const SECTIONS = {
       ].join("\n");
     },
   },
+  "ev-desk": {
+    title: "EV charging map",
+    async context() {
+      const { getChargingStations } = await import("@/lib/ev");
+      const { stations, bySource } = await getChargingStations();
+      if (!stations.length) return null;
+      return [
+        `This 3D map shows ${stations.length} EV charging stations across India from open sources: ${bySource["e-AMRIT"]} from NITI Aayog's e-AMRIT list (an old government pilot list) and ${bySource.OSM} mapped by OpenStreetMap volunteers.`,
+        "India's official registry (BEE's EV Yatra) reports tens of thousands of public charging stations, but it does not publish an open downloadable list — so this map is a partial picture, denser where volunteer mappers are active (big cities).",
+        "Why it matters for the grid: a fast charger can draw as much power as dozens of homes at once, so where chargers cluster changes local electricity demand.",
+        "An empty area on this map means 'not mapped in these sources', not necessarily 'no charger there'.",
+      ].join("\n");
+    },
+  },
   "storage-wire": {
     title: "Storage newswire",
     async context() {

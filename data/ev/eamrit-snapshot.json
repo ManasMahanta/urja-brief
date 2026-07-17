@@ -1,0 +1,1278 @@
+{
+ "source": "e-AMRIT (NITI Aayog) getChargingStation",
+ "fetched": "2026-07-17",
+ "stations": [
+  {
+   "name": "EESL Legislative Assembly Goa",
+   "city": "Goa",
+   "state": "Goa",
+   "lat": 15.51047,
+   "lng": 73.83722,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL R block GK1",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.54722,
+   "lng": 77.24432,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL SDA market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.54627,
+   "lng": 77.19711,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Tata Advance Systems Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.60895,
+   "lng": 77.36272,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Feroze Gandhi Road Lajpat Nagar",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55875,
+   "lng": 77.09096,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL PVR Priya Delhi",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55801,
+   "lng": 77.15881,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Meharchand Double Storey Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60265,
+   "lng": 77.16663,
+   "pricing": "free"
+  },
+  {
+   "name": "ANERT-EESL Sangamukham Kerala",
+   "city": "Thiruvananthapuram",
+   "state": "Kerala",
+   "lat": 8.48116,
+   "lng": 76.91246,
+   "pricing": "free"
+  },
+  {
+   "name": "ANERT-EESL Thycaud Kerala",
+   "city": "Thiruvananthapuram",
+   "state": "Kerala",
+   "lat": 8.49278,
+   "lng": 76.9573,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Veer Savarkar Marg, Lajpat Nagar",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55848,
+   "lng": 77.09096,
+   "pricing": "free"
+  },
+  {
+   "name": "HAREDA EESL Panchkula",
+   "city": "Panchkula",
+   "state": "Haryana",
+   "lat": 30.69593,
+   "lng": 76.83487,
+   "pricing": "free"
+  },
+  {
+   "name": "HAREDA EESL Panchkula",
+   "city": "Panchkula",
+   "state": "Haryana",
+   "lat": 30.69593,
+   "lng": 76.83487,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL ECO Park Gate No 1 New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.594,
+   "lng": 88.4729,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL ECO Park Gate No 1 New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.594,
+   "lng": 88.4729,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Biswa Bangla Gate Rotary",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57916,
+   "lng": 88.46876,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shapoorji Bus Terminus Newtown",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08825,
+   "lng": 80.28536,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Adhoc New Central, HPCL, New Town",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08825,
+   "lng": 80.28536,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shapoorji Bus Terminus Newtown",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0791,
+   "lng": 80.26154,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chennai Egmore metro",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0791,
+   "lng": 80.26154,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Saidapet Metro station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0237,
+   "lng": 80.2282,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Saidapet Metro station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0237,
+   "lng": 80.2282,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Saidapet Metro station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0237,
+   "lng": 80.2282,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Tirumangalam Metro station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0853,
+   "lng": 80.2016,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Thirumangalam Metro",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0853,
+   "lng": 80.2016,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Tirumangalam Metro station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0853,
+   "lng": 80.2016,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Alandur metro",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55661,
+   "lng": 77.23273,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chennai Egmore metro",
+   "city": "Ernakulam",
+   "state": "Kerala",
+   "lat": 9.97716,
+   "lng": 76.27777,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shapoorji Bus Terminus Newtown",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.5695,
+   "lng": 88.5169,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Adhoc New Central, HPCL, New Town",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.58242,
+   "lng": 77.36359,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shapoorji Bus Terminus Newtown",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57732,
+   "lng": 77.35877,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Koyambedu",
+   "city": "Muriyil",
+   "state": "Kerala",
+   "lat": 9.63628,
+   "lng": 76.3352,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Anna Nagar East Station",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.58428,
+   "lng": 77.31375,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Adhoc New Central, HPCL, New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.61791,
+   "lng": 88.46637,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Prayas Bhawan Nava Raipur",
+   "city": "Raipur",
+   "state": "Chhattisgarh",
+   "lat": 21.16395,
+   "lng": 81.78855,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Mantraly Naya Raipur",
+   "city": "Raipur",
+   "state": "Chhattisgarh",
+   "lat": 21.1615,
+   "lng": 81.79686,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Prayas Bhawan Nava Raipur",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57265,
+   "lng": 77.34083,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Mantraly Naya Raipur",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57265,
+   "lng": 77.34083,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shapoorji Bus Terminus Newtown",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.5695,
+   "lng": 88.5169,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shenoy Nagar Metro",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.56702,
+   "lng": 77.3353,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Pachaiyappa",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.56702,
+   "lng": 77.3353,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Pachaiyappa",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.60575,
+   "lng": 77.35733,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Kirti Mann Plaza Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57265,
+   "lng": 77.34083,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Adwant Chowk Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.50002,
+   "lng": 77.41088,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Alka Cinema Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.58261,
+   "lng": 77.31284,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL RTO Office Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.58801,
+   "lng": 77.35208,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Alandur metro",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0035,
+   "lng": 80.20155,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Ganga Shopping Complex Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.56702,
+   "lng": 77.3353,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL SPCI Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.5447,
+   "lng": 77.32726,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chennai Egmore metro",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.0791,
+   "lng": 80.26154,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL R block GK1",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.54722,
+   "lng": 77.24432,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL SDA market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.54627,
+   "lng": 77.19711,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Safderjung Enclave",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55894,
+   "lng": 77.19631,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57859,
+   "lng": 88.45082,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57859,
+   "lng": 88.45082,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Business Club New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.58525,
+   "lng": 88.45471,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Business Club New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.58525,
+   "lng": 88.45471,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Gate no 4 Eco Park New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.61125,
+   "lng": 88.46659,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Gate no 4 Eco Park New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.61125,
+   "lng": 88.46659,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Gate No 6 Eco Park New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.60778,
+   "lng": 88.46392,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Gate No 6 Eco Park New Town",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.60778,
+   "lng": 88.46392,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Tata Memorial Cancer Hospital",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57735,
+   "lng": 88.47858,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Tata Memorial Cancer Hospital",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57735,
+   "lng": 88.47858,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Axis Mall",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57902,
+   "lng": 88.46032,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Axis Mall",
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.57902,
+   "lng": 88.46032,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Aurbindo Market place",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55207,
+   "lng": 77.20328,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sector 50 Market",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57043,
+   "lng": 77.35981,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sector 50 Market",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57043,
+   "lng": 77.35981,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sector 50 Market",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57043,
+   "lng": 77.35981,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Yelahanka Bengaluru",
+   "city": "Bangalore",
+   "state": "Karnataka",
+   "lat": 13.15246,
+   "lng": 77.56807,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sushma Swaraj Bhawan",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.59583,
+   "lng": 77.18056,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL PVR Priya Delhi",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.55801,
+   "lng": 77.15881,
+   "pricing": "free"
+  },
+  {
+   "name": "ANERT-EESL Ernakulam Kerala",
+   "city": "Ernakulam",
+   "state": "Kerala",
+   "lat": 9.97716,
+   "lng": 76.27777,
+   "pricing": "free"
+  },
+  {
+   "name": "ANERT-EESL Sangamukham Kerala",
+   "city": "Shanghumukham",
+   "state": "Kerala",
+   "lat": 8.48116,
+   "lng": 76.91246,
+   "pricing": "free"
+  },
+  {
+   "name": "ANERT-EESL Thycaud Kerala",
+   "city": "Thiruvananthapuram",
+   "state": "Kerala",
+   "lat": 8.49278,
+   "lng": 76.9573,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shopprix Mall Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.5971,
+   "lng": 77.36271,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Malviya Nagar Delhi",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.53101,
+   "lng": 77.20869,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Malviya Nagar Delhi",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.53101,
+   "lng": 77.20869,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL High court station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08825,
+   "lng": 80.28536,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL High court station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08825,
+   "lng": 80.28536,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Koyambedu",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.07404,
+   "lng": 80.19535,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Koyambedu",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.07404,
+   "lng": 80.19535,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Anna Nagar East Station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08471,
+   "lng": 80.2199,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Anna Nagar East Station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08471,
+   "lng": 80.2199,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Electronic City Metro Station",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.62647,
+   "lng": 77.37514,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL H-Block Market, Haldiram",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.62891,
+   "lng": 77.3753,
+   "pricing": "free"
+  },
+  {
+   "name": "Chennai Metro Nandanam Station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.03176,
+   "lng": 80.24192,
+   "pricing": "free"
+  },
+  {
+   "name": "Chennai Metro Nandanam Station",
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.03176,
+   "lng": 80.24192,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Nagpur",
+   "city": "Nagpur",
+   "state": "Maharashtra",
+   "lat": 21.08701,
+   "lng": 79.06362,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Nagpur",
+   "city": "Nagpur",
+   "state": "Maharashtra",
+   "lat": 21.08701,
+   "lng": 79.06362,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sector 16 Near Metro Station Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57861,
+   "lng": 77.31748,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Prayas Bhawan Nava Raipur",
+   "city": "Raipur",
+   "state": "Chhattisgarh",
+   "lat": 21.16395,
+   "lng": 81.78855,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Mantraly Naya Raipur",
+   "city": "Raipur",
+   "state": "Chhattisgarh",
+   "lat": 21.1615,
+   "lng": 81.79686,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL EDC Parking Goa",
+   "city": "Goa",
+   "state": "Goa",
+   "lat": 15.5108,
+   "lng": 73.8368,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Prithviraj Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60074,
+   "lng": 77.22628,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Jor Bagh Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58812,
+   "lng": 77.21756,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Khanna Market 1",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58053,
+   "lng": 77.22105,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Khanna Market 2",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58436,
+   "lng": 77.22054,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Malcha Marg Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60181,
+   "lng": 77.18643,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL M Block",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63297,
+   "lng": 77.22294,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Barakhamba",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63026,
+   "lng": 77.22567,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Block M, CP",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63297,
+   "lng": 77.22294,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Oriental Bank",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63158,
+   "lng": 77.2219,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Ferns n Petals",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63442,
+   "lng": 77.22085,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Croma",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63439,
+   "lng": 77.22104,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL PVR Plaza",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63491,
+   "lng": 77.21952,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Block B",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63437,
+   "lng": 77.2195,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL HP Petrol Pump",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63158,
+   "lng": 77.2219,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sansad Marg",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62442,
+   "lng": 77.21372,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Iqbal Bros.",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63384,
+   "lng": 77.21766,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Bharat Sanchar Bhawan",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62172,
+   "lng": 77.21929,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL FICCI Chowk",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.6267,
+   "lng": 77.23194,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Press Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61752,
+   "lng": 77.21392,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Snow White",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63388,
+   "lng": 77.22108,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Van Heusen",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63414,
+   "lng": 77.22038,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Shanker Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63373,
+   "lng": 77.22353,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Akashwani Bhawan",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62266,
+   "lng": 77.21099,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Yashwant Place",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58549,
+   "lng": 77.19163,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL IVORY Mart",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63388,
+   "lng": 77.22108,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Yashwant Place Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.5853,
+   "lng": 77.19101,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Malcha Marg Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60181,
+   "lng": 77.18643,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Laxmi Bai Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.578,
+   "lng": 77.20952,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Block A",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63242,
+   "lng": 77.21807,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sarojini Nagar Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.57726,
+   "lng": 77.19692,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Gopal Das Building",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63112,
+   "lng": 77.22165,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Jain Bhawan",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63361,
+   "lng": 77.20769,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Hotel Claridges",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.59948,
+   "lng": 77.21558,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Indian Coffee House",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63164,
+   "lng": 77.21589,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Khan Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60032,
+   "lng": 77.22688,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Charak Palika Hospital",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58537,
+   "lng": 77.17755,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Hotel Claridges 1",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.6012,
+   "lng": 77.21598,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Janpath Guest House",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62853,
+   "lng": 77.21946,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Khan Market",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.60032,
+   "lng": 77.22688,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Block H",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63407,
+   "lng": 77.21768,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Charak Palika Hospital",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58537,
+   "lng": 77.17755,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL KTM",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.63363,
+   "lng": 77.22195,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL PSOI Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58664,
+   "lng": 77.19335,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL PSOI Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58664,
+   "lng": 77.19335,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Chelmsford Club",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.61826,
+   "lng": 77.21257,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Lodhi Garden",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.5904,
+   "lng": 77.22019,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Talkatora Stadium",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.622,
+   "lng": 77.19496,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Talkatora Stadium",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.622,
+   "lng": 77.19496,
+   "pricing": "free"
+  },
+  {
+   "name": "",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.6285,
+   "lng": 77.21705,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Talkatora Garden",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62353,
+   "lng": 77.19568,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Talkatora Garden",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.62353,
+   "lng": 77.19568,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Delhi Haat",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.57279,
+   "lng": 77.20866,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Palika Maternity Hospital",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.58352,
+   "lng": 77.22206,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Lodhi Garden",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.5904,
+   "lng": 77.22019,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Delhi Haat",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.57279,
+   "lng": 77.20866,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Delhi Haat",
+   "city": "Delhi",
+   "state": "Delhi",
+   "lat": 28.57279,
+   "lng": 77.20866,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Noida Authority Parking Sector 2 Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.58428,
+   "lng": 77.31375,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Sector 16 Near Metro Station Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.57861,
+   "lng": 77.31748,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Marie Gold Exports Block A Sector 64 Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.36375,
+   "lng": 77.27384,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Hexagon Sector 65 Noida",
+   "city": "Noida",
+   "state": "Uttar Pradesh",
+   "lat": 28.6132,
+   "lng": 77.3814,
+   "pricing": "free"
+  },
+  {
+   "name": "EESL Mamlatdar Office Mapusa Goa",
+   "city": "Goa",
+   "state": "Goa",
+   "lat": 15.588,
+   "lng": 73.8139,
+   "pricing": "free"
+  }
+ ]
+}
