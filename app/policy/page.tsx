@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { getPolicyHeadlines } from "@/lib/power";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 export const revalidate = 900;
 
@@ -108,6 +109,9 @@ async function PolicyWire() {
         Headlines are reporting, not legal facts — confirm status against the issuing authority
         before treating a proposal as a rule.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="policy-wire" />
+      </div>
     </section>
   );
 }

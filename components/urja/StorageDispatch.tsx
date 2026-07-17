@@ -1,5 +1,6 @@
 import { getGridSnapshot } from "@/lib/grid-live";
 import { getLoadCurves } from "@/lib/samples";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 // Live storage dispatch from MERIT plus today's sampled storage curve.
 // The honest headline: grid-scale storage barely registers on the live grid
@@ -114,6 +115,9 @@ export default async function StorageDispatch() {
         nothing about installed capacity, energy stored, or charging. A low number is despatch
         economics, not a verdict on the technology.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="storage-dispatch" />
+      </div>
     </section>
   );
 }

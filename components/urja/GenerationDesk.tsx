@@ -1,4 +1,5 @@
 import { getEnergyHeadlines, officialSources } from "@/lib/power";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 const generationSources = officialSources.slice(0, 2);
 
@@ -15,6 +16,7 @@ export default async function GenerationDesk() {
       <p className="urja-kicker">Generation newswire</p>
       <h2 className="mt-3 text-xl font-semibold">Headlines worth checking against the record</h2>
       {headlines.length ? <div className="mt-5 divide-y divide-cyan-100/10">{headlines.map((headline) => <a key={headline.url} href={headline.url} target="_blank" rel="noreferrer" className="block py-3 text-sm font-medium leading-snug text-slate-200 transition hover:text-cyan-200">{headline.title}</a>)}</div> : <p className="mt-5 text-sm text-slate-400">The newswire is temporarily unavailable. The official generation sources remain available above.</p>}
+      <div className="mt-4"><ExplainButton section="generation-desk" /></div>
     </section>
   </div>;
 }

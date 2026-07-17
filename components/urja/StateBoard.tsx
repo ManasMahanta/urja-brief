@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getStatewisePower, stateSlug } from "@/lib/grid-live";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 const mw = (value: number | null) =>
   value === null ? "—" : Math.round(value).toLocaleString("en-IN");
@@ -75,6 +76,9 @@ export default async function StateBoard() {
         Generation, Import. They are not daily energy and not an official CEA record. A dash means
         MERIT reported no figure.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="state-board" />
+      </div>
     </section>
   );
 }

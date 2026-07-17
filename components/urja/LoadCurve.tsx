@@ -1,4 +1,5 @@
 import { getLoadCurves, type GridSample } from "@/lib/samples";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 // Today-vs-yesterday load curve and renewable-share curve, drawn from the
 // 15-minute MERIT samples in data/samples/. Two separate single-axis charts —
@@ -199,6 +200,9 @@ export default async function LoadCurve() {
         Each point is an instantaneous MERIT reading sampled every 15 minutes; gaps mean the
         source was unreachable at that time. Not official CEA data.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="load-curve" />
+      </div>
     </section>
   );
 }

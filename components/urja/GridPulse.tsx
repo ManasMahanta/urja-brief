@@ -1,4 +1,5 @@
 import { getGridSnapshot, type FuelMix } from "@/lib/grid-live";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 const FUELS: Array<{ key: keyof FuelMix; label: string; bar: string }> = [
   { key: "thermal", label: "Thermal", bar: "bg-amber-400/80" },
@@ -87,6 +88,9 @@ export default async function GridPulse() {
         Instantaneous readings from the Ministry of Power&apos;s MERIT dashboard at the fetch time
         shown — not daily energy, not peak demand, and not an official CEA record.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="grid-pulse" />
+      </div>
     </section>
   );
 }

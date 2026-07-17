@@ -1,4 +1,5 @@
 import { getEnergyHeadlines, getPowerQuotes, officialSources } from "@/lib/power";
+import ExplainButton from "@/components/urja/ExplainButton";
 
 function changeClass(change: number) {
   return change >= 0 ? "text-emerald-300" : "text-rose-300";
@@ -20,6 +21,7 @@ export default async function PowerBoard() {
             <p className={`font-mono text-xs ${changeClass(quote.changePercent)}`}>{quote.changePercent >= 0 ? "+" : ""}{quote.changePercent.toFixed(2)}%</p>
           </div>)}
         </div> : <p className="mt-5 text-sm text-slate-400">Live market data is temporarily unavailable. The desk remains source-linked.</p>}
+        <div className="mt-4"><ExplainButton section="market-watch" /></div>
       </section>
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Official reporting desk</p>

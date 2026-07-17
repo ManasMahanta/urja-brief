@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import StorageDispatch from "@/components/urja/StorageDispatch";
+import ExplainButton from "@/components/urja/ExplainButton";
 import { getStorageHeadlines } from "@/lib/power";
 
 export const revalidate = 900;
@@ -111,6 +112,9 @@ async function StorageWire() {
         Tender headlines usually report the award, not the commissioning — check the three reading
         rules above before treating capacity as operational.
       </p>
+      <div className="mt-3">
+        <ExplainButton section="storage-wire" />
+      </div>
     </section>
   );
 }
