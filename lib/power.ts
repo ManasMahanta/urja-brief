@@ -62,6 +62,10 @@ export const getEnergyHeadlines = (limit = 6) => getHeadlines("India power secto
 export const getPolicyHeadlines = (limit = 8) =>
   getHeadlines('India ("Ministry of Power" OR MNRE OR CERC OR CEA electricity OR "power policy") when:14d', limit);
 
+// Storage-scoped newswire: BESS tenders, pumped storage, storage policy.
+export const getStorageHeadlines = (limit = 8) =>
+  getHeadlines('India ("battery energy storage" OR BESS OR "pumped storage" OR "energy storage tender") when:30d', limit);
+
 export const officialSources = [
   { name: "CEA Daily Generation Report", cadence: "Daily", href: "https://cea.nic.in/opm_grid_operation/daily-generation-report/?lang=en", detail: "All-India generation and fuel mix." },
   { name: "CEA Daily Renewable Generation", cadence: "Daily", href: "https://cea.nic.in/sitemap/?lang=en", detail: "Renewable generation reporting." },
