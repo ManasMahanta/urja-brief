@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import GridPulse from "@/components/urja/GridPulse";
 import PowerBoard from "@/components/urja/PowerBoard";
 import PowerBrief from "@/components/urja/PowerBrief";
 import PowerAnalyst from "@/components/urja/PowerAnalyst";
@@ -39,7 +40,10 @@ export default function Home() {
           <div><p className="urja-kicker">The live desk</p><h2 className="mt-3 text-3xl font-semibold tracking-tight">The power system, with its receipts.</h2></div>
           <p className="max-w-sm text-sm text-slate-400">Live market data is labelled as market context. Official reporting remains the source of record for the physical system.</p>
         </div>
-        <Suspense fallback={<div className="urja-panel h-72 animate-pulse" />}><PowerBoard /></Suspense>
+        <div className="flex flex-col gap-5">
+          <Suspense fallback={<div className="urja-panel h-56 animate-pulse" />}><GridPulse /></Suspense>
+          <Suspense fallback={<div className="urja-panel h-72 animate-pulse" />}><PowerBoard /></Suspense>
+        </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-2">
