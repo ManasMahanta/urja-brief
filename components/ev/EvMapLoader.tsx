@@ -17,7 +17,15 @@ const IndiaMap3D = dynamic(() => import("@/components/ev/IndiaMap3D"), {
 
 export default function EvMapLoader(props: {
   states: StateShape[];
-  stations: Array<{ lat: number; lng: number; source: string }>;
+  stations: Array<{
+    name: string;
+    city?: string;
+    state?: string;
+    lat: number;
+    lng: number;
+    source: string;
+    pricing?: string;
+  }>;
   countsByState: Record<string, number>;
 }) {
   return <IndiaMap3D {...props} />;

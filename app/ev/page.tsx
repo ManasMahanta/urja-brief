@@ -28,7 +28,15 @@ async function EvMap() {
     <>
       <EvMapLoader
         states={states}
-        stations={stations.map((s) => ({ lat: s.lat, lng: s.lng, source: s.source }))}
+        stations={stations.map((s) => ({
+          name: s.name,
+          city: s.city,
+          state: s.state,
+          lat: s.lat,
+          lng: s.lng,
+          source: s.source,
+          pricing: s.pricing,
+        }))}
         countsByState={countsByState}
       />
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
