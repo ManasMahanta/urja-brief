@@ -70,24 +70,41 @@ async function getEamritStations(): Promise<ChargingStation[]> {
   }
 }
 
-// OSM charging stations across India via Overpass. Blocked from some
-// networks; from the deployed server it usually works. Center points only.
+function osmSnapshot(): ChargingStation[] {
+  try {
+    const file = path.join(process.cwd(), "data/ev/osm-snapshot.json");
+    const data = JSON.parse(fs.readFileSync(file, "utf8")) as {
+      stations: Array<{ name: string; lat: number; lng: number }>;
+    };
+    return data.stations.map((s) => ({ ...s, source: "OSM" as const }));
+  } catch {
+    return [];
+  }
+}
+
+// OSM charging stations across India via Overpass, falling back to the
+// committed snapshot. The Accept header is load-bearing: Overpass returns
+// 406 Not Acceptable without it. Center points only.
 async function getOsmStations(): Promise<ChargingStation[]> {
   const query =
-    '[out:json][timeout:50];node["amenity"="charging_station"](6.5,68,36,97.5);out body 4000;';
+    '[out:json][timeout:50];node["amenity"="charging_station"](6.5,68,36,97.5);out body 6000;';
   try {
     const response = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "UrjaBrief/1.0 (urja-brief.vercel.app)" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        "User-Agent": "UrjaBrief/1.0 (urja-brief.vercel.app)",
+      },
       body: `data=${encodeURIComponent(query)}`,
       next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(55_000),
+      signal: AbortSignal.timeout(30_000),
     });
-    if (!response.ok) return [];
+    if (!response.ok) return osmSnapshot();
     const data = (await response.json()) as {
       elements?: Array<{ lat: number; lon: number; tags?: Record<string, string> }>;
     };
-    return (data.elements ?? [])
+    const live = (data.elements ?? [])
       .filter((el) => inIndia(el.lat, el.lon))
       .map((el) => ({
         name: el.tags?.name ?? el.tags?.operator ?? "Charging station",
@@ -95,8 +112,9 @@ async function getOsmStations(): Promise<ChargingStation[]> {
         lng: el.lon,
         source: "OSM" as const,
       }));
+    return live.length ? live : osmSnapshot();
   } catch {
-    return [];
+    return osmSnapshot();
   }
 }
 

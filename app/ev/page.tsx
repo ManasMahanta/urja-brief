@@ -6,6 +6,9 @@ import { countStationsByState, getChargingStations, getIndiaStates, getOfficialC
 import { getEvHeadlines } from "@/lib/power";
 
 export const revalidate = 3600;
+// The live Overpass fetch can take ~20s; give the ISR render room beyond the
+// hobby default. Falls back to the committed OSM snapshot either way.
+export const maxDuration = 60;
 
 export const metadata = {
   title: "EV Charging",

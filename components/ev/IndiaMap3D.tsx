@@ -18,18 +18,29 @@ const px = (lng: number) => (lng - 82.5) * 1.0;
 const pz = (lat: number) => -(lat - 22.5) * 1.0;
 
 const BASE_H = 0.35;
+const MAX_RISE = 5.5; // tallest state's extra height above the base plate
+
+// Height encodes mapped-station count (square-root so a few dense states don't
+// dwarf the rest), turning the map into a 3D bar chart on the country outline.
+function stateHeight(count: number, maxCount: number): number {
+  if (count <= 0 || maxCount <= 0) return BASE_H;
+  return BASE_H + Math.sqrt(count / maxCount) * MAX_RISE;
+}
 
 function StateMesh({
   state,
   count,
+  maxCount,
   hovered,
   onHover,
 }: {
   state: StateShape;
   count: number;
+  maxCount: number;
   hovered: boolean;
   onHover: (name: string | null) => void;
 }) {
+  const height = stateHeight(count, maxCount);
   const geometry = useMemo(() => {
     const shapes = state.polys.map((ring) => {
       const shape = new THREE.Shape();
@@ -41,15 +52,19 @@ function StateMesh({
       });
       return shape;
     });
-    const geo = new THREE.ExtrudeGeometry(shapes, { depth: BASE_H, bevelEnabled: false });
+    const geo = new THREE.ExtrudeGeometry(shapes, { depth: height, bevelEnabled: false });
     geo.rotateX(-Math.PI / 2);
     return geo;
-  }, [state]);
+  }, [state, height]);
+
+  // Warmer, brighter for denser states — a redundant magnitude cue alongside height.
+  const t = maxCount > 0 ? Math.min(1, count / maxCount) : 0;
+  const top = new THREE.Color("#0b2436").lerp(new THREE.Color("#22d3ee"), 0.15 + t * 0.5);
 
   return (
     <mesh
       geometry={geometry}
-      position={[0, hovered ? 0.12 : 0, 0]}
+      position={[0, hovered ? 0.15 : 0, 0]}
       onPointerOver={(event) => {
         event.stopPropagation();
         onHover(state.name);
@@ -57,25 +72,50 @@ function StateMesh({
       onPointerOut={() => onHover(null)}
     >
       <meshStandardMaterial
-        color={hovered ? "#164e63" : "#0b2436"}
-        emissive={hovered ? "#22d3ee" : count > 0 ? "#0e7490" : "#0f172a"}
-        emissiveIntensity={hovered ? 0.55 : count > 0 ? 0.18 : 0.06}
-        metalness={0.15}
-        roughness={0.75}
+        color={hovered ? "#22d3ee" : top}
+        emissive={hovered ? "#22d3ee" : "#0e7490"}
+        emissiveIntensity={hovered ? 0.6 : 0.1 + t * 0.35}
+        metalness={0.2}
+        roughness={0.65}
       />
     </mesh>
   );
 }
 
-function Stations({ stations }: { stations: StationPoint[] }) {
+// Ray-cast point-in-polygon, ring coords [lng, lat].
+function inRing(lng: number, lat: number, ring: number[][]): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (yi > lat !== yj > lat && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function Stations({
+  stations,
+  states,
+  countsByState,
+  maxCount,
+}: {
+  stations: StationPoint[];
+  states: StateShape[];
+  countsByState: Record<string, number>;
+  maxCount: number;
+}) {
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(stations.length * 3);
     const col = new Float32Array(stations.length * 3);
-    const eamrit = new THREE.Color("#f59e0b");
-    const osm = new THREE.Color("#22d3ee");
+    const eamrit = new THREE.Color("#fbbf24");
+    const osm = new THREE.Color("#67e8f9");
     stations.forEach((s, i) => {
+      // Sit each charger on top of its state's bar so points read as
+      // belonging to the surface, not floating over it.
+      const state = states.find((st) => st.polys.some((ring) => inRing(s.lng, s.lat, ring)));
+      const h = stateHeight(state ? countsByState[state.name] ?? 0 : 0, maxCount);
       pos[i * 3] = px(s.lng);
-      pos[i * 3 + 1] = BASE_H + 0.16;
+      pos[i * 3 + 1] = h + 0.12;
       pos[i * 3 + 2] = pz(s.lat);
       const c = s.source === "e-AMRIT" ? eamrit : osm;
       col[i * 3] = c.r;
@@ -83,7 +123,7 @@ function Stations({ stations }: { stations: StationPoint[] }) {
       col[i * 3 + 2] = c.b;
     });
     return { positions: pos, colors: col };
-  }, [stations]);
+  }, [stations, states, countsByState, maxCount]);
 
   return (
     <points>
@@ -114,33 +154,43 @@ export default function IndiaMap3D({
   countsByState: Record<string, number>;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const maxCount = useMemo(
+    () => Math.max(1, ...Object.values(countsByState)),
+    [countsByState],
+  );
 
   return (
-    <div className="relative h-[26rem] w-full overflow-hidden rounded-xl border border-cyan-100/10 bg-[#05070d] sm:h-[30rem]">
-      <Canvas camera={{ position: [0, 26, 24], fov: 38 }} dpr={[1, 2]}>
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[12, 30, 10]} intensity={1.1} color="#bfe8ff" />
-        <directionalLight position={[-14, 12, -8]} intensity={0.3} color="#38bdf8" />
+    <div className="relative h-[26rem] w-full overflow-hidden rounded-xl border border-cyan-100/10 bg-[#05070d] sm:h-[32rem]">
+      <Canvas camera={{ position: [1, 20, 30], fov: 40 }} dpr={[1, 2]}>
+        <ambientLight intensity={0.65} />
+        <directionalLight position={[12, 30, 10]} intensity={1.15} color="#bfe8ff" />
+        <directionalLight position={[-16, 10, -6]} intensity={0.35} color="#38bdf8" />
         <group>
           {states.map((state) => (
             <StateMesh
               key={state.name}
               state={state}
               count={countsByState[state.name] ?? 0}
+              maxCount={maxCount}
               hovered={hovered === state.name}
               onHover={setHovered}
             />
           ))}
-          <Stations stations={stations} />
+          <Stations
+            stations={stations}
+            states={states}
+            countsByState={countsByState}
+            maxCount={maxCount}
+          />
         </group>
         <OrbitControls
           autoRotate={!hovered}
-          autoRotateSpeed={0.55}
+          autoRotateSpeed={0.5}
           enablePan={false}
-          minDistance={14}
-          maxDistance={46}
-          minPolarAngle={0.35}
-          maxPolarAngle={1.25}
+          minDistance={16}
+          maxDistance={52}
+          minPolarAngle={0.25}
+          maxPolarAngle={1.3}
         />
       </Canvas>
 
@@ -154,9 +204,12 @@ export default function IndiaMap3D({
             </p>
           </>
         ) : (
-          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-400">
-            Drag to rotate · scroll to zoom · hover a state
-          </p>
+          <>
+            <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-400">
+              Drag to rotate · scroll to zoom · hover a state
+            </p>
+            <p className="mt-0.5 text-[0.62rem] text-slate-500">Taller state = more mapped stations</p>
+          </>
         )}
       </div>
 
