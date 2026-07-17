@@ -1,0 +1,9 @@
+{
+  "regions": ["bom1"],
+  "crons": [
+    {
+      "path": "/api/refresh",
+      "schedule": "0 13 * * *"
+    }
+  ]
+}
