@@ -146,6 +146,18 @@ export async function getStateList(): Promise<Array<{ code: string; name: string
 
 type StateStatusEntry = { Demand?: string; ISGS?: string; ImportData?: string };
 
+export const stateSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+// Resolve a /grid/[state] slug to its MERIT entry and fetch its current status.
+export async function getStateBySlug(
+  slug: string,
+): Promise<{ state: { code: string; name: string }; power: StatePower | null } | null> {
+  const states = await getStateList();
+  const state = states.find((entry) => stateSlug(entry.name) === slug);
+  if (!state) return null;
+  return { state, power: await getStatePower(state) };
+}
+
 // MERIT's JSON keys are misleading; its own UI labels them Demand Met /
 // Own Generation / Import (ISGS → "Own Generation", ImportData → "Import").
 async function getStatePower(state: { code: string; name: string }): Promise<StatePower | null> {

@@ -1,4 +1,5 @@
-import { getStatewisePower } from "@/lib/grid-live";
+import Link from "next/link";
+import { getStatewisePower, stateSlug } from "@/lib/grid-live";
 
 const mw = (value: number | null) =>
   value === null ? "—" : Math.round(value).toLocaleString("en-IN");
@@ -45,7 +46,14 @@ export default async function StateBoard() {
           <tbody className="divide-y divide-cyan-100/10">
             {states.map((state) => (
               <tr key={state.code}>
-                <td className="py-2 pr-3 font-medium text-slate-200">{state.name}</td>
+                <td className="py-2 pr-3 font-medium">
+                  <Link
+                    href={`/grid/${stateSlug(state.name)}`}
+                    className="text-slate-200 transition hover:text-cyan-200"
+                  >
+                    {state.name}
+                  </Link>
+                </td>
                 <td className="py-2 pr-3 font-mono text-slate-100">{mw(state.demandMetMw)}</td>
                 <td className="py-2 pr-3 font-mono text-slate-400">{mw(state.ownGenerationMw)}</td>
                 <td className="py-2 pr-3 font-mono text-slate-400">{mw(state.importMw)}</td>

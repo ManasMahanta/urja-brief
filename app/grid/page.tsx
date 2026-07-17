@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import GridPulse from "@/components/urja/GridPulse";
+import LoadCurve from "@/components/urja/LoadCurve";
 import StateBoard from "@/components/urja/StateBoard";
 
 // ISR: the page (and with it the ~35 uncached MERIT state POSTs) re-renders at
@@ -33,6 +34,10 @@ export default function GridPage() {
 
       <Suspense fallback={<div className="urja-panel h-56 animate-pulse" />}>
         <GridPulse />
+      </Suspense>
+
+      <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}>
+        <LoadCurve />
       </Suspense>
 
       <Suspense fallback={<div className="urja-panel h-96 animate-pulse" />}>

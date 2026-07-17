@@ -13,7 +13,7 @@ function headers() {
     Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
     Accept: "application/vnd.github+json",
     "Content-Type": "application/json",
-    "User-Agent": "signal-and-noise-publisher",
+    "User-Agent": "urja-brief-publisher",
   };
 }
 

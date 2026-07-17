@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import GridPulse from "@/components/urja/GridPulse";
+import LoadCurve from "@/components/urja/LoadCurve";
 import PowerBoard from "@/components/urja/PowerBoard";
 import PowerBrief from "@/components/urja/PowerBrief";
 import PowerAnalyst from "@/components/urja/PowerAnalyst";
@@ -42,6 +43,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-5">
           <Suspense fallback={<div className="urja-panel h-56 animate-pulse" />}><GridPulse /></Suspense>
+          <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><LoadCurve /></Suspense>
           <Suspense fallback={<div className="urja-panel h-72 animate-pulse" />}><PowerBoard /></Suspense>
         </div>
       </section>

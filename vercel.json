@@ -1,9 +1,14 @@
 {
   "regions": ["bom1"],
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ':!data'",
   "crons": [
     {
       "path": "/api/refresh",
       "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/email-brief",
+      "schedule": "30 12 * * 5"
     }
   ]
 }
