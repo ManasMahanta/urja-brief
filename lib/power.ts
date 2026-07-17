@@ -41,9 +41,9 @@ export async function getPowerQuotes(): Promise<PowerQuote[]> {
 
 const strip = (value: string) => value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').trim();
 
-export async function getEnergyHeadlines(limit = 6): Promise<EnergyHeadline[]> {
+async function getHeadlines(query: string, limit: number): Promise<EnergyHeadline[]> {
   try {
-    const response = await fetch("https://news.google.com/rss/search?q=India+power+sector+when%3A7d&hl=en-IN&gl=IN&ceid=IN:en", { next: { revalidate: 900 }, headers: { "User-Agent": ua } });
+    const response = await fetch(`https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-IN&gl=IN&ceid=IN:en`, { next: { revalidate: 900 }, headers: { "User-Agent": ua } });
     if (!response.ok) return [];
     const xml = await response.text();
     return (xml.match(/<item>[\s\S]*?<\/item>/g) ?? []).slice(0, limit).map((item) => {
@@ -55,6 +55,12 @@ export async function getEnergyHeadlines(limit = 6): Promise<EnergyHeadline[]> {
     return [];
   }
 }
+
+export const getEnergyHeadlines = (limit = 6) => getHeadlines("India power sector when:7d", limit);
+
+// Policy-scoped newswire: ministries and regulators rather than the market.
+export const getPolicyHeadlines = (limit = 8) =>
+  getHeadlines('India ("Ministry of Power" OR MNRE OR CERC OR CEA electricity OR "power policy") when:14d', limit);
 
 export const officialSources = [
   { name: "CEA Daily Generation Report", cadence: "Daily", href: "https://cea.nic.in/opm_grid_operation/daily-generation-report/?lang=en", detail: "All-India generation and fuel mix." },
