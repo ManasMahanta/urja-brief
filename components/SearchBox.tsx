@@ -7,8 +7,6 @@ import type { SearchDoc } from "@/lib/search";
 const KIND_STYLE: Record<SearchDoc["kind"], string> = {
   Issue: "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300",
   Glossary: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
-  Stock: "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300",
-  Learn: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
   Page: "bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300",
 };
 

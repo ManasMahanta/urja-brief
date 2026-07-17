@@ -1,25 +1,23 @@
 import { getAllIssues } from "@/lib/issues";
 import { glossary, slugifyTerm } from "@/lib/glossary";
-import { learnLevels } from "@/lib/academy";
-import { coveredStocks } from "@/lib/stocks-data";
 
 export type SearchDoc = {
   title: string;
   snippet: string;
   url: string;
-  kind: "Issue" | "Glossary" | "Learn" | "Stock" | "Page";
+  kind: "Issue" | "Glossary" | "Page";
 };
 
 const snippet = (text: string, max = 160) =>
   text.replace(/\s+/g, " ").trim().slice(0, max);
 
 const STATIC_PAGES: SearchDoc[] = [
-  { title: "Markets", snippet: "Live pulse on Indian markets: indices, gainers and losers, sector heat, trending stocks, and a quote lookup.", url: "/markets", kind: "Page" },
-  { title: "IPO Center", snippet: "Mainboard and SME IPOs, how listings performed, and what to check before you apply.", url: "/ipo", kind: "Page" },
-  { title: "Academy", snippet: "Learn to invest by level, ask the analyst, and self-check your understanding.", url: "/academy", kind: "Page" },
-  { title: "Markets Glossary", snippet: "Plain-English definitions of the terms every Indian investor should know.", url: "/glossary", kind: "Page" },
-  { title: "Coverage", snippet: "The stocks Bazaar Brief tracks, with live prices and a neutral what-to-watch note.", url: "/coverage", kind: "Page" },
-  { title: "Issues archive", snippet: "Every past issue of Bazaar Brief.", url: "/issues", kind: "Page" },
+  { title: "Grid desk", snippet: "Live all-India demand, the state-wise supply picture, and the official reporting behind the grid.", url: "/grid", kind: "Page" },
+  { title: "Generation desk", snippet: "India's daily generation mix — thermal, hydro, nuclear, renewables — with sources and reporting dates.", url: "/generation", kind: "Page" },
+  { title: "Policy desk", snippet: "CEA, Ministry of Power, and MNRE reporting with practical system impact.", url: "/policy", kind: "Page" },
+  { title: "Power Glossary", snippet: "Plain-English definitions of the terms behind India's power system.", url: "/glossary", kind: "Page" },
+  { title: "Methodology", snippet: "How Urja Brief separates official reporting, market context, and interpretation.", url: "/methodology", kind: "Page" },
+  { title: "Issues archive", snippet: "Every past issue of Urja Brief.", url: "/issues", kind: "Page" },
 ];
 
 // Builds the full client-side search index from all static content. Called
@@ -43,26 +41,6 @@ export function buildSearchIndex(): SearchDoc[] {
       url: `/glossary/${slugifyTerm(term.term)}`,
       kind: "Glossary",
     });
-  }
-
-  for (const stock of coveredStocks) {
-    docs.push({
-      title: `${stock.name} (${stock.symbol})`,
-      snippet: `${stock.sector} · ${snippet(stock.thesis)}`,
-      url: "/coverage",
-      kind: "Stock",
-    });
-  }
-
-  for (const level of learnLevels) {
-    for (const q of level.questions) {
-      docs.push({
-        title: q,
-        snippet: `${level.level} · self-check`,
-        url: `/academy#${level.id}`,
-        kind: "Learn",
-      });
-    }
   }
 
   return docs;
