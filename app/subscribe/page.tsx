@@ -15,9 +15,9 @@ export default function SubscribePage() {
         {site.tagline}
       </h1>
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        {site.cadence}, free. A Market Pulse for the busy, the week&apos;s big
-        move and results for the curious, and IPOs and sector shifts for everyone
-        in between. Educational only, never a buy or sell call.
+        {site.cadence}, free. A Grid Pulse for the busy, the week&apos;s big
+        signal for the curious, and the transition, fuel, and policy desks for
+        everyone in between. Educational only, never advice.
       </p>
       <SignupForm />
       <p className="text-sm text-zinc-500 dark:text-zinc-400">

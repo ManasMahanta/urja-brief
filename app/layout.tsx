@@ -53,11 +53,15 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col overflow-x-clip">
         <Backdrop />
-        <Header />
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
-          {children}
-        </main>
-        <Footer />
+        {/* Explicit stacking above the backdrop's z-0 — a negative z-index
+            here would paint the backdrop behind the opaque body background. */}
+        <div className="relative z-10 flex min-h-full flex-1 flex-col">
+          <Header />
+          <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
+            {children}
+          </main>
+          <Footer />
+        </div>
         <Analytics />
       </body>
     </html>

@@ -5,7 +5,7 @@ import { buildSearchIndex } from "@/lib/search";
 export const metadata: Metadata = {
   title: "Search",
   description:
-    "Search everything on Bazaar Brief — past issues, glossary terms, covered stocks, and Academy questions.",
+    "Search everything on Urja Brief — past issues, glossary terms, and the desk pages.",
 };
 
 export default function SearchPage() {
@@ -16,7 +16,7 @@ export default function SearchPage() {
         <h1 className="text-4xl font-bold tracking-tight">Search</h1>
         <p className="mt-3 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
           One box across everything on the site — past issues, glossary
-          definitions, covered stocks, and Academy questions. Instant, as you type.
+          definitions, and the desk pages. Instant, as you type.
         </p>
       </section>
       <SearchBox index={index} />

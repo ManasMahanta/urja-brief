@@ -14,7 +14,9 @@ export default function Backdrop() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      // z-0, not negative: a -z child paints behind the opaque body background
+      // (the flex negative-z-index trap); siblings stack above via z-10.
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
       <div className="grid-floor absolute inset-0" />
       <div className="orb absolute -top-48 left-[6%] h-[36rem] w-[36rem] bg-sky-500/12" />
