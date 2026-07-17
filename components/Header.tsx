@@ -6,6 +6,7 @@ const nav = [
   { href: "/grid", label: "Grid" },
   { href: "/generation", label: "Generation" },
   { href: "/storage", label: "Storage" },
+  { href: "/records", label: "Records" },
   { href: "/policy", label: "Policy" },
   { href: "/methodology", label: "Methodology" },
 ];

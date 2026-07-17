@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { callGLM, glmConfigured } from "@/lib/glm";
 import { powerContext } from "@/lib/power-ai";
+import { allowRequest, clientIp } from "@/lib/rate-limit";
 
 function clean(value: unknown, limit: number) {
   return typeof value === "string" ? value.trim().slice(0, limit) : "";
@@ -8,6 +9,11 @@ function clean(value: unknown, limit: number) {
 
 export async function POST(request: Request) {
   if (!glmConfigured()) return NextResponse.json({ error: "The analyst is not configured. Add an AI provider key to enable it." }, { status: 503 });
+  // Every analyst call reaches GLM (unlike the cached explainer), so it gets
+  // the tighter budget.
+  if (!allowRequest(`analyst:${clientIp(request)}`, 6)) {
+    return NextResponse.json({ error: "Too many questions in a minute — please pause briefly." }, { status: 429 });
+  }
   let body: { question?: unknown };
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
   const question = clean(body.question, 800);

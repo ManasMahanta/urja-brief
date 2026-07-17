@@ -23,6 +23,7 @@ export async function GET(request: Request) {
   revalidatePath("/grid");
   revalidatePath("/generation");
   revalidatePath("/storage");
+  revalidatePath("/records");
   revalidatePath("/policy");
   revalidateTag("urja-power-brief", "max");
 

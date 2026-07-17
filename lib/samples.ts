@@ -12,6 +12,25 @@ export type GridSample = {
   demandMw: number;
   mix: Record<string, number>;
   rePct: number;
+  // Per-state [demandMet, ownGeneration, import] MW (major states only),
+  // present on samples taken after state sampling shipped.
+  states?: Record<string, [number, number | null, number | null]>;
+};
+
+export type ObservedRecord = { value: number; t: string };
+export type Records = Partial<{
+  peakDemandMw: ObservedRecord;
+  maxRePct: ObservedRecord;
+  maxRenewableMw: ObservedRecord;
+  maxStorageMw: ObservedRecord;
+}> & { since?: string };
+
+export type DayRollup = {
+  peakMw: number;
+  peakT: string;
+  minMw: number;
+  maxRePct: number;
+  samples: number;
 };
 
 const SAMPLES_REPO = process.env.GITHUB_REPO ?? "ManasMahanta/urja-brief";
@@ -49,4 +68,50 @@ export async function getLoadCurves(): Promise<{
   const [todayDate, yesterdayDate] = [istDate(0), istDate(-1)];
   const [today, yesterday] = await Promise.all([readDay(todayDate), readDay(yesterdayDate)]);
   return { today, yesterday, todayDate, yesterdayDate };
+}
+
+async function readDataFile<T>(repoPath: string, localPath: string, fallback: T): Promise<T> {
+  try {
+    const response = await fetch(
+      `https://raw.githubusercontent.com/${SAMPLES_REPO}/main/${repoPath}`,
+      { next: { revalidate: 300 } },
+    );
+    if (response.ok) return (await response.json()) as T;
+  } catch {
+    // fall through to the local copy
+  }
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), localPath), "utf8")) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export const getRecords = () =>
+  readDataFile<Records>("data/records.json", "data/records.json", {});
+
+// Current + previous IST month rollups merged, newest day first.
+export async function getRecentRollups(): Promise<Array<{ date: string } & DayRollup>> {
+  const months = [...new Set([istDate(0).slice(0, 7), istDate(-31).slice(0, 7)])];
+  const maps = await Promise.all(
+    months.map((month) =>
+      readDataFile<Record<string, DayRollup>>(
+        `data/rollups/${month}.json`,
+        `data/rollups/${month}.json`,
+        {},
+      ),
+    ),
+  );
+  return maps
+    .flatMap((map) => Object.entries(map).map(([date, roll]) => ({ date, ...roll })))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+// A single state's [time, demandMw] series for today, from the per-state
+// readings the sampler records for major states.
+export async function getStateSeries(code: string): Promise<Array<{ t: string; demandMw: number }>> {
+  const { today } = await getLoadCurves();
+  return today
+    .filter((sample) => sample.states?.[code])
+    .map((sample) => ({ t: sample.t, demandMw: sample.states![code][0] }));
 }

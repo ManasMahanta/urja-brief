@@ -132,24 +132,39 @@ export function isExplainSection(value: string): value is ExplainSection {
   return value in SECTIONS;
 }
 
-const SYSTEM_PROMPT =
-  "You explain India's power grid to someone with no background in it — a curious person on a commute. " +
-  "Write 4-6 short sentences in simple everyday English. No jargon: spell out what any technical term means in passing " +
-  "(e.g. 'MW, a measure of power flowing right now'). Use a simple analogy if it genuinely helps. " +
-  "Use ONLY the numbers and facts in the supplied context; round numbers naturally (say 'about 2.7 lakh MW'). " +
+export type ExplainLang = "en" | "hi";
+
+const SHARED_RULES =
+  "Use ONLY the numbers and facts in the supplied context; round numbers naturally. " +
   "Never predict the future, never give investment or safety advice, never invent figures, causes, or sources. " +
   "End with one short sentence on what this section canNOT tell you.";
 
-async function generate(section: ExplainSection): Promise<string | null> {
+const SYSTEM_PROMPTS: Record<ExplainLang, string> = {
+  en:
+    "You explain India's power grid to someone with no background in it — a curious person on a commute. " +
+    "Write 4-6 short sentences in simple everyday English. No jargon: spell out what any technical term means in passing " +
+    "(e.g. 'MW, a measure of power flowing right now'). Use a simple analogy if it genuinely helps. " +
+    SHARED_RULES,
+  hi:
+    "आप भारत के बिजली ग्रिड को एक आम इंसान को समझा रहे हैं जिसे इस क्षेत्र की कोई जानकारी नहीं है। " +
+    "4-6 छोटे वाक्य सरल, रोज़मर्रा की हिंदी में लिखें (आँकड़े और MW जैसी इकाइयाँ अंकों में ही रहने दें)। " +
+    "कोई तकनीकी शब्द आए तो उसका मतलब साथ में समझाएँ। ज़रूरत हो तो एक आसान उदाहरण या उपमा दें। " +
+    SHARED_RULES,
+};
+
+async function generate(section: ExplainSection, lang: ExplainLang): Promise<string | null> {
   if (!glmConfigured()) return null;
   const context = await SECTIONS[section].context();
   if (!context) return null;
-  return callGLM(SYSTEM_PROMPT, `SECTION: ${SECTIONS[section].title}\n\n${context}`, 400);
+  return callGLM(SYSTEM_PROMPTS[lang], `SECTION: ${SECTIONS[section].title}\n\n${context}`, 500);
 }
 
-// One cached explanation per section; refreshes with the data (15 min).
-export async function getSimpleExplanation(section: ExplainSection): Promise<string | null> {
-  const cached = unstable_cache(() => generate(section), ["urja-explain", section], {
+// One cached explanation per section and language; refreshes with the data (15 min).
+export async function getSimpleExplanation(
+  section: ExplainSection,
+  lang: ExplainLang = "en",
+): Promise<string | null> {
+  const cached = unstable_cache(() => generate(section, lang), ["urja-explain", section, lang], {
     revalidate: 900,
     tags: ["urja-explain"],
   });
