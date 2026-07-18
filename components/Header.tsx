@@ -13,6 +13,7 @@ const groups: Array<{ label: string; items: Array<{ href: string; label: string 
       { href: "/carbon", label: "Carbon" },
       { href: "/renewables", label: "Solar & wind" },
       { href: "/coal", label: "Coal & fuel" },
+      { href: "/petroleum", label: "Petroleum" },
       { href: "/generation", label: "Generation" },
       { href: "/storage", label: "Storage" },
       { href: "/ev", label: "EV" },

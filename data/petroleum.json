@@ -1,0 +1,17 @@
+{
+  "asOf": "2026-07",
+  "source": "PPAC / Ministry of Petroleum & Natural Gas — approximate, dated reference (no clean free live feed exists)",
+  "crude": {
+    "indianBasketUsdPerBbl": 75,
+    "note": "The Indian Basket is the crude mix India actually buys (sour Oman/Dubai + Brent). PPAC prices it daily; this is a recent reference level."
+  },
+  "importDependencePct": 88,
+  "crudeImportBillUsdBn": 137,
+  "lpg": {
+    "domesticCylinderInr": 803,
+    "cylinderKg": 14.2,
+    "ujjwalaSubsidyInr": 300,
+    "note": "14.2 kg domestic refill, metro reference price. PMUY (Ujjwala) beneficiaries get a per-cylinder subsidy."
+  },
+  "priceMechanism": "Since 2017 OMCs revise petrol/diesel daily in principle, but in practice pump prices move far less than crude — they tend to rise quickly when crude climbs and fall slowly when it drops, with tax absorbing much of the swing."
+}
