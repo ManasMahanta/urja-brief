@@ -80,6 +80,24 @@ const SECTIONS = {
       ].filter(Boolean).join("\n");
     },
   },
+  "duck-curve": {
+    title: "The duck curve",
+    async context() {
+      const { getDuckCurve } = await import("@/lib/duck");
+      const duck = await getDuckCurve();
+      if (!duck) return null;
+      const mw = (v: number) => `${Math.round(v).toLocaleString("en-IN")} MW`;
+      return [
+        "This chart shows two lines through the day: total electricity demand, and 'net load' — demand minus solar. The gap between them is how much solar is doing.",
+        `Solar's estimated peak today was about ${mw(duck.peakSolarMw)}, which pushes the net-load line down into a dip around midday (the 'belly' of the duck).`,
+        duck.eveningRamp
+          ? `Then solar sets around sunset while demand is still high, so net load shoots up by roughly ${mw(duck.eveningRamp.mw)} in the evening — a steep 'ramp' that coal and hydro plants have to cover quickly.`
+          : "After sunset solar disappears while demand stays high, so net load climbs steeply — the evening ramp.",
+        "Why it matters: the evening ramp is the hardest part of the day to supply, and it's why evenings lean on coal even when the afternoon was very green. It's also the gap that batteries and pumped-hydro storage exist to fill.",
+        "Solar here is estimated from the daily shape, not metered, so the belly's exact depth is approximate.",
+      ].join("\n");
+    },
+  },
   "renewables-split": {
     title: "How much is solar vs wind right now",
     async context() {

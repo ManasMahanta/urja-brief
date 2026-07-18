@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import RooftopCalculator from "@/components/urja/RooftopCalculator";
+import DuckCurve from "@/components/urja/DuckCurve";
 import ExplainButton from "@/components/urja/ExplainButton";
 import { getEstimatedReSplit } from "@/lib/renewables";
 import { getReOutlook, type Strength } from "@/lib/renewables";
@@ -129,6 +130,105 @@ function LeadersSection() {
   );
 }
 
+function TargetTracker() {
+  const n = capacity.nationalMw;
+  const nonFossilGw = (n.solar + n.wind + n.largeHydro + n.bioPower + n.smallHydro + n.nuclear) / 1000;
+  const target = capacity.nonFossilTargetGw2030;
+  const pct = (nonFossilGw / target) * 100;
+  const yearsLeft = Math.max(1, 2030 - new Date().getFullYear());
+  const pace = (target - nonFossilGw) / yearsLeft;
+  return (
+    <section className="urja-panel p-5 sm:p-6">
+      <p className="urja-kicker">500 GW by 2030 — the non-fossil target</p>
+      <p className="mt-3 text-sm leading-relaxed text-slate-400">
+        India&apos;s headline climate commitment: 500 GW of non-fossil power capacity (renewables +
+        hydro + nuclear) by 2030.
+      </p>
+      <div className="mt-4 h-4 w-full overflow-hidden rounded-full bg-slate-950/60" aria-hidden="true">
+        <span className="block h-full rounded-full bg-gradient-to-r from-emerald-400/80 to-cyan-400/80" style={{ width: `${Math.min(100, pct)}%` }} />
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+          <p className="text-xs text-slate-400">Non-fossil capacity now</p>
+          <p className="mt-1 font-mono text-2xl font-semibold text-white">{nonFossilGw.toFixed(0)}<span className="ml-1 text-sm font-normal text-slate-400">GW ({pct.toFixed(0)}%)</span></p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+          <p className="text-xs text-slate-400">2030 target</p>
+          <p className="mt-1 font-mono text-2xl font-semibold text-cyan-200">{target}<span className="ml-1 text-sm font-normal text-slate-400">GW</span></p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+          <p className="text-xs text-slate-400">Pace needed</p>
+          <p className="mt-1 font-mono text-2xl font-semibold text-amber-200">{pace.toFixed(0)}<span className="ml-1 text-sm font-normal text-slate-400">GW/yr</span></p>
+        </div>
+      </div>
+      <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
+        Capacity from MNRE ({capacity.asOf}), approximate. Solar has been the engine — India has been
+        adding renewables at a record pace, which is what keeps this target in reach.
+      </p>
+    </section>
+  );
+}
+
+async function YieldRanking() {
+  const yields = await getSolarYields();
+  if (!yields.length) return null;
+  const ranked = [...yields].sort((a, b) => b.yieldKwhPerKwYear - a.yieldKwhPerKwYear);
+  const top = ranked[0].yieldKwhPerKwYear;
+  return (
+    <section className="urja-panel p-5 sm:p-6">
+      <p className="urja-kicker">Where rooftop solar pays back fastest</p>
+      <p className="mt-2 text-sm text-slate-400">Cities ranked by how many units a kilowatt of panels makes in a year (measured radiation).</p>
+      <div className="mt-4 space-y-1.5">
+        {ranked.map((c, i) => (
+          <div key={c.name} className="flex items-center gap-3">
+            <span className="w-6 shrink-0 text-right font-mono text-xs text-slate-500">{i + 1}</span>
+            <span className="w-28 shrink-0 text-sm text-slate-300">{c.name}</span>
+            <div className="relative h-6 flex-1 overflow-hidden rounded-md bg-slate-950/60">
+              <span className="absolute inset-y-0 left-0 rounded-md bg-amber-400/25" style={{ width: `${(c.yieldKwhPerKwYear / top) * 100}%` }} aria-hidden="true" />
+              <span className="absolute inset-y-0 left-2.5 flex items-center font-mono text-xs text-slate-100">{c.yieldKwhPerKwYear.toLocaleString("en-IN")} kWh/kW/yr</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CapacityReality() {
+  const n = capacity.nationalMw;
+  const cf = capacity.capacityFactorPct;
+  const rows = [
+    { name: "Solar", installed: n.solar, cf: cf.solar, color: "text-amber-300" },
+    { name: "Wind", installed: n.wind, cf: cf.wind, color: "text-sky-300" },
+  ];
+  return (
+    <section className="urja-panel p-5 sm:p-6">
+      <p className="urja-kicker">Capacity vs reality</p>
+      <p className="mt-3 text-sm leading-relaxed text-slate-400">
+        Installed capacity isn&apos;t constant output. The sun sets and the wind drops, so a fleet
+        averages only a fraction of its nameplate — its capacity factor.
+      </p>
+      <div className="mt-4 space-y-4">
+        {rows.map((r) => (
+          <div key={r.name}>
+            <div className="flex items-baseline justify-between text-sm">
+              <span className={`font-semibold ${r.color}`}>{r.name}</span>
+              <span className="font-mono text-slate-300">{gw(r.installed)} installed · ~{r.cf}% capacity factor · ~{gw(r.installed * r.cf / 100)} average</span>
+            </div>
+            <div className="mt-1.5 h-3 w-full overflow-hidden rounded-full bg-slate-950/60" aria-hidden="true">
+              <span className={`block h-full rounded-full ${r.name === "Solar" ? "bg-amber-400/70" : "bg-sky-400/70"}`} style={{ width: `${r.cf}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
+        So {gw(n.solar)} of solar averages nearer {gw(n.solar * cf.solar / 100)} of actual power. Capacity factors are
+        typical Indian values; the instantaneous figure is higher at noon (solar) and in the monsoon (wind).
+      </p>
+    </section>
+  );
+}
+
 export default function RenewablesPage() {
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -148,9 +248,13 @@ export default function RenewablesPage() {
       </section>
 
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><SplitSection /></Suspense>
+      <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><DuckCurve /></Suspense>
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><OutlookSection /></Suspense>
       <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><RooftopSection /></Suspense>
+      <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><YieldRanking /></Suspense>
+      <TargetTracker />
       <LeadersSection />
+      <CapacityReality />
 
       <Link className="text-sm font-semibold text-cyan-300 hover:text-white" href="/carbon">
         ← Carbon desk

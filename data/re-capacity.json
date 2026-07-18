@@ -3,7 +3,9 @@
   "asOf": "2026-05-31",
   "note": "Approximate figures from MNRE physical-progress reporting. Capacity is added every month, so treat these as reference points, not a live feed.",
   "unit": "MW",
-  "nationalMw": { "solar": 140600, "wind": 56807, "largeHydro": 51965, "bioPower": 11748, "smallHydro": 5179 },
+  "nationalMw": { "solar": 140600, "wind": 56807, "largeHydro": 51965, "bioPower": 11748, "smallHydro": 5179, "nuclear": 8180 },
+  "nonFossilTargetGw2030": 500,
+  "capacityFactorPct": { "solar": 19, "wind": 25 },
   "states": [
     { "state": "Rajasthan", "solar": 42166, "wind": 5900 },
     { "state": "Gujarat", "solar": 32303, "wind": 13000 },
