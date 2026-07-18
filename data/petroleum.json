@@ -13,5 +13,21 @@
     "ujjwalaSubsidyInr": 300,
     "note": "14.2 kg domestic refill, metro reference price. PMUY (Ujjwala) beneficiaries get a per-cylinder subsidy."
   },
-  "priceMechanism": "Since 2017 OMCs revise petrol/diesel daily in principle, but in practice pump prices move far less than crude — they tend to rise quickly when crude climbs and fall slowly when it drops, with tax absorbing much of the swing."
+  "priceMechanism": "Since 2017 OMCs revise petrol/diesel daily in principle, but in practice pump prices move far less than crude — they tend to rise quickly when crude climbs and fall slowly when it drops, with tax absorbing much of the swing.",
+  "lastPriceRevisionDate": "2024-03-14",
+  "lastPriceRevisionNote": "Last nationwide pump-price revision: a ₹2/litre cut on 14 Mar 2024. Prices had been frozen since May 2022 before that, and have barely moved since — even as crude swung.",
+  "ethanol": {
+    "blendPct": 20,
+    "targetNote": "20% average ethanol blending in petrol (E20) — reached in 2025, about five years ahead of the 2030 target.",
+    "forexSavedCrore": 140000,
+    "crudeSubstitutedLakhTonnes": 205,
+    "mileageNote": "E20 can lower fuel economy by roughly 1–6% in engines not tuned for it; newer E20-ready vehicles see less.",
+    "why": "Ethanol is blended into petrol mainly to cut crude imports and support cane/grain farmers."
+  },
+  "taxRevenue": {
+    "centralExciseCrore": 330000,
+    "stateVatCrore": 320000,
+    "totalCrore": 650000,
+    "note": "Approximate annual government revenue from petroleum taxes — central excise plus state VAT. One of the largest single revenue lines for both the Centre and the states."
+  }
 }

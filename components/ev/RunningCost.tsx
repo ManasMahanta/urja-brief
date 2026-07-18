@@ -9,14 +9,22 @@ import tariffs from "@/data/tariffs.json";
 // feed — city pump price (reference) + the state's domestic tariff is enough
 // to put ₹/km side by side.
 
-// km per litre (petrol/diesel) or km per kWh (electric), real-world.
-const VEHICLES: Array<{ name: string; fuel: "petrol" | "diesel" | "electric"; eff: number; kind: "2W" | "4W" }> = [
+// Efficiency in km per unit: petrol/diesel per litre, cng per kg, electric per kWh.
+const VEHICLES: Array<{ name: string; fuel: "petrol" | "diesel" | "cng" | "electric"; eff: number; kind: "2W" | "4W" }> = [
   { name: "Petrol scooter", fuel: "petrol", eff: 45, kind: "2W" },
   { name: "Electric scooter", fuel: "electric", eff: 25, kind: "2W" },
   { name: "Petrol car", fuel: "petrol", eff: 16, kind: "4W" },
   { name: "Diesel car", fuel: "diesel", eff: 20, kind: "4W" },
+  { name: "CNG car", fuel: "cng", eff: 26, kind: "4W" },
   { name: "Electric car", fuel: "electric", eff: 6.5, kind: "4W" },
 ];
+
+const FUEL_BAR: Record<"petrol" | "diesel" | "cng" | "electric", string> = {
+  petrol: "bg-amber-400/25",
+  diesel: "bg-amber-400/25",
+  cng: "bg-sky-400/25",
+  electric: "bg-emerald-400/30",
+};
 
 const CITY_STATE: Record<string, string> = {
   Mumbai: "Maharashtra", Delhi: "Delhi", Bengaluru: "Karnataka", Chennai: "Tamil Nadu",
@@ -32,7 +40,7 @@ export default function RunningCost() {
   const [kmPerMonth, setKmPerMonth] = useState(1000);
 
   const rows = useMemo(() => {
-    const prices = (fuel.cities as Record<string, { petrol: number; diesel: number }>)[city];
+    const prices = (fuel.cities as Record<string, { petrol: number; diesel: number; cng: number }>)[city];
     const tariff = (tariffs.states as Record<string, number>)[CITY_STATE[city]] ?? tariffs.national;
     return VEHICLES.map((v) => {
       const unitPrice = v.fuel === "electric" ? tariff : prices[v.fuel];
@@ -48,7 +56,7 @@ export default function RunningCost() {
 
   return (
     <section className="urja-panel p-5 sm:p-6">
-      <p className="urja-kicker">Petrol vs electric — what a kilometre costs</p>
+      <p className="urja-kicker">Petrol, diesel, CNG, electric — what a kilometre costs</p>
       <p className="mt-3 text-sm leading-relaxed text-slate-400">
         A charger is only half the decision; running cost is the other half. This compares fuel and
         electricity at your city&apos;s prices — the comparison a station map can&apos;t make.
@@ -84,7 +92,7 @@ export default function RunningCost() {
             <span className="w-32 shrink-0 text-sm text-slate-300">{r.name}</span>
             <div className="relative h-7 flex-1 overflow-hidden rounded-md bg-slate-950/60">
               <span
-                className={`absolute inset-y-0 left-0 rounded-md ${r.fuel === "electric" ? "bg-emerald-400/30" : "bg-amber-400/25"}`}
+                className={`absolute inset-y-0 left-0 rounded-md ${FUEL_BAR[r.fuel]}`}
                 style={{ width: `${Math.max(6, (r.perKm / maxPerKm) * 100)}%` }}
                 aria-hidden="true"
               />
@@ -109,7 +117,8 @@ export default function RunningCost() {
       <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
         Fuel is running cost only — not the higher upfront price of an EV, battery replacement, or
         public fast-charging (dearer than home power). Assumes home charging and typical real-world
-        efficiency (petrol car 16 km/l, EV car 6.5 km/kWh). Pump prices are reference values, {fuel.asOf}.
+        efficiency (petrol car 16 km/l, CNG car 26 km/kg, EV car 6.5 km/kWh). Pump, CNG and power
+        prices are reference values, {fuel.asOf}.
       </p>
     </section>
   );

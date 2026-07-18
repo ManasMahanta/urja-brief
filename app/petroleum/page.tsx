@@ -4,6 +4,8 @@ import petro from "@/data/petroleum.json";
 
 export const revalidate = 86400;
 
+const lakhCrore = (crore: number) => (crore / 100000).toFixed(1);
+
 export const metadata = {
   title: "Petroleum & Fuels",
   description:
@@ -11,6 +13,10 @@ export const metadata = {
 };
 
 export default function PetroleumPage() {
+  const daysSinceRevision = Math.floor(
+    (Date.now() - new Date(petro.lastPriceRevisionDate + "T00:00:00+05:30").getTime()) / 86_400_000,
+  );
+
   return (
     <div className="flex flex-col gap-12 pb-8">
       <section className="urja-hero relative overflow-hidden rounded-2xl border border-cyan-200/10 px-6 py-12 sm:px-10 sm:py-16">
@@ -30,6 +36,18 @@ export default function PetroleumPage() {
 
       {/* #1 — the transparency breakdown */}
       <FuelBreakdown />
+
+      {/* Tax revenue — the aggregate of every litre's tax */}
+      <section className="rounded-2xl border border-rose-400/20 bg-rose-400/[0.05] p-5 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-rose-200">What the tax adds up to</p>
+        <p className="mt-3 text-lg leading-relaxed text-slate-200">
+          Across every litre sold, petroleum taxes raise roughly{" "}
+          <span className="font-mono font-semibold text-rose-200">₹{lakhCrore(petro.taxRevenue.totalCrore)} lakh crore a year</span>{" "}
+          — about ₹{lakhCrore(petro.taxRevenue.centralExciseCrore)} lakh crore in central excise and
+          ₹{lakhCrore(petro.taxRevenue.stateVatCrore)} lakh crore in state VAT.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-rose-100/70">{petro.taxRevenue.note}</p>
+      </section>
 
       {/* #2 — crude & import dependence */}
       <section className="urja-panel p-5 sm:p-6">
@@ -54,10 +72,39 @@ export default function PetroleumPage() {
         </p>
       </section>
 
-      {/* #3 — rise fast, fall slow */}
+      {/* Ethanol blending — the import-cutting policy story */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">Ethanol blending (E20)</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-emerald-300/20 bg-emerald-300/[0.05] p-4">
+            <p className="text-xs text-slate-400">Ethanol in petrol</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-emerald-300">{petro.ethanol.blendPct}%</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Forex saved (cumulative)</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">₹{lakhCrore(petro.ethanol.forexSavedCrore)}<span className="ml-1 text-sm font-normal text-slate-400">lakh cr</span></p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Crude substituted</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{petro.ethanol.crudeSubstitutedLakhTonnes}<span className="ml-1 text-sm font-normal text-slate-400">lakh t</span></p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">
+          {petro.ethanol.why} {petro.ethanol.targetNote}
+        </p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-500">{petro.ethanol.mileageNote}</p>
+      </section>
+
+      {/* #4 — prices frozen watch + rise fast, fall slow */}
       <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-amber-200">Rise fast, fall slow</p>
-        <p className="mt-3 text-sm leading-relaxed text-amber-100/85">{petro.priceMechanism}</p>
+        <p className="mt-3 text-lg leading-relaxed text-slate-200">
+          It&apos;s been{" "}
+          <span className="font-mono font-semibold text-amber-200">{daysSinceRevision.toLocaleString("en-IN")} days</span>{" "}
+          since the last nationwide pump-price revision ({new Date(petro.lastPriceRevisionDate + "T00:00:00+05:30").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" })}),
+          while crude has swung the whole time.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-amber-100/80">{petro.lastPriceRevisionNote} {petro.priceMechanism}</p>
       </section>
 
       {/* #4 — LPG */}

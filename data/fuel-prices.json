@@ -1,20 +1,20 @@
 {
-  "unit": "INR per litre",
+  "unit": "petrol/diesel in INR per litre; cng in INR per kg",
   "asOf": "2026-07",
-  "note": "Representative city pump prices set by the oil marketing companies. India revises these daily and they vary by city with local VAT, so treat them as reference points, not a live per-station feed — there is no per-station price in India.",
-  "national": { "petrol": 100.5, "diesel": 90.0 },
+  "note": "Representative city pump prices set by the oil marketing companies (petrol/diesel) and city gas distributors (CNG). India revises these and they vary by city, so treat them as reference points, not a live per-station feed — there is no per-station price in India.",
+  "national": { "petrol": 100.5, "diesel": 90.0, "cng": 82.0 },
   "cities": {
-    "Mumbai": { "petrol": 104.2, "diesel": 92.1 },
-    "Delhi": { "petrol": 94.7, "diesel": 87.6 },
-    "Bengaluru": { "petrol": 102.9, "diesel": 89.0 },
-    "Chennai": { "petrol": 100.8, "diesel": 92.4 },
-    "Kolkata": { "petrol": 105.0, "diesel": 91.8 },
-    "Hyderabad": { "petrol": 107.4, "diesel": 95.7 },
-    "Pune": { "petrol": 104.0, "diesel": 90.5 },
-    "Ahmedabad": { "petrol": 94.5, "diesel": 90.4 },
-    "Jaipur": { "petrol": 104.9, "diesel": 90.4 },
-    "Lucknow": { "petrol": 94.7, "diesel": 87.8 },
-    "Chandigarh": { "petrol": 94.3, "diesel": 82.4 },
-    "Kochi": { "petrol": 105.7, "diesel": 94.7 }
+    "Mumbai": { "petrol": 104.2, "diesel": 92.1, "cng": 75.0 },
+    "Delhi": { "petrol": 94.7, "diesel": 87.6, "cng": 75.1 },
+    "Bengaluru": { "petrol": 102.9, "diesel": 89.0, "cng": 90.0 },
+    "Chennai": { "petrol": 100.8, "diesel": 92.4, "cng": 90.0 },
+    "Kolkata": { "petrol": 105.0, "diesel": 91.8, "cng": 89.0 },
+    "Hyderabad": { "petrol": 107.4, "diesel": 95.7, "cng": 90.0 },
+    "Pune": { "petrol": 104.0, "diesel": 90.5, "cng": 87.0 },
+    "Ahmedabad": { "petrol": 94.5, "diesel": 90.4, "cng": 77.5 },
+    "Jaipur": { "petrol": 104.9, "diesel": 90.4, "cng": 84.0 },
+    "Lucknow": { "petrol": 94.7, "diesel": 87.8, "cng": 94.5 },
+    "Chandigarh": { "petrol": 94.3, "diesel": 82.4, "cng": 84.0 },
+    "Kochi": { "petrol": 105.7, "diesel": 94.7, "cng": 89.0 }
   }
 }
