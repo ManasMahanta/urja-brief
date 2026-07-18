@@ -2,14 +2,35 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { site } from "@/lib/site";
 
-const nav = [
-  { href: "/grid", label: "Grid" },
-  { href: "/generation", label: "Generation" },
-  { href: "/storage", label: "Storage" },
-  { href: "/ev", label: "EV" },
-  { href: "/records", label: "Records" },
-  { href: "/policy", label: "Policy" },
-  { href: "/methodology", label: "Methodology" },
+// Nav grouped into sections so the bar stays short as desks multiply. Desktop
+// shows three dropdowns (pure CSS hover + focus-within, no client JS); mobile
+// keeps the single <details> tray, laid out as labelled sections.
+const groups: Array<{ label: string; items: Array<{ href: string; label: string }> }> = [
+  {
+    label: "Desks",
+    items: [
+      { href: "/grid", label: "Grid" },
+      { href: "/carbon", label: "Carbon" },
+      { href: "/generation", label: "Generation" },
+      { href: "/storage", label: "Storage" },
+      { href: "/ev", label: "EV" },
+    ],
+  },
+  {
+    label: "Track record",
+    items: [
+      { href: "/records", label: "Records" },
+      { href: "/scoreboard", label: "Scoreboard" },
+    ],
+  },
+  {
+    label: "About",
+    items: [
+      { href: "/policy", label: "Policy" },
+      { href: "/methodology", label: "Methodology" },
+      { href: "/data", label: "Open data" },
+    ],
+  },
 ];
 
 export default function Header() {
@@ -20,18 +41,31 @@ export default function Header() {
           <Logo />
         </Link>
 
-        <nav
-          className="hidden items-center gap-5 text-sm md:flex lg:gap-6"
-          aria-label="Main navigation"
-        >
-          {nav.map((item) => (
-            <Link
-                key={item.href}
-                href={item.href}
-                className="text-text-dim transition hover:text-white"
+        <nav className="hidden items-center gap-1 text-sm md:flex" aria-label="Main navigation">
+          {groups.map((group) => (
+            <div key={group.label} className="group relative">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-text-dim transition hover:text-white group-hover:text-white group-focus-within:text-white"
+                aria-haspopup="true"
               >
-                {item.label}
-            </Link>
+                {group.label}
+                <span className="text-xs text-text-mute transition group-hover:rotate-180" aria-hidden="true">⌄</span>
+              </button>
+              <div className="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="glass flex w-52 flex-col p-2">
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-lg px-3 py-2 text-sm font-medium text-text-dim transition hover:bg-white/5 hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           ))}
         </nav>
 
@@ -59,22 +93,27 @@ export default function Header() {
             </summary>
             <nav
               aria-label="Mobile navigation"
-              className="glass absolute right-0 z-50 mt-2 flex w-56 flex-col p-2"
+              className="glass absolute right-0 z-50 mt-2 flex w-60 flex-col gap-1 p-2"
             >
-              {nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 hover:text-white ${
-                    "text-text-dim"
-                  }`}
-                >
-                  {item.label}
-                </Link>
+              {groups.map((group) => (
+                <div key={group.label} className="flex flex-col">
+                  <p className="px-3 pb-1 pt-2 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-text-mute">
+                    {group.label}
+                  </p>
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-dim hover:bg-white/5 hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               ))}
               <Link
                 href="/search"
-                className="rounded-lg px-3 py-3 text-sm font-medium text-text-dim hover:bg-white/5 hover:text-white"
+                className="mt-1 rounded-lg px-3 py-2.5 text-sm font-medium text-text-dim hover:bg-white/5 hover:text-white"
               >
                 Search
               </Link>
