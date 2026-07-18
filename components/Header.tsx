@@ -32,6 +32,7 @@ const groups: Array<{ label: string; items: Array<{ href: string; label: string 
       { href: "/policy", label: "Policy" },
       { href: "/methodology", label: "Methodology" },
       { href: "/data", label: "Open data" },
+      { href: "/status", label: "System status" },
     ],
   },
 ];

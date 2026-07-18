@@ -6,7 +6,7 @@ import { glossary, slugifyTerm } from "@/lib/glossary";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     "",
-    "/grid", "/carbon", "/renewables", "/coal", "/petroleum", "/generation", "/storage", "/ev", "/records", "/scoreboard", "/policy", "/methodology", "/data",
+    "/grid", "/carbon", "/renewables", "/coal", "/petroleum", "/generation", "/storage", "/ev", "/records", "/scoreboard", "/policy", "/methodology", "/data", "/status",
     "/issues", "/glossary", "/about", "/start-here", "/subscribe", "/search",
   ].map((path) => ({
     url: `${site.url}${path}`,

@@ -18,6 +18,21 @@ const lenses = [
   ["Reliability", "Fuel availability, weather exposure, and constraints that change outcomes."],
 ];
 
+const desks: Array<{ href: string; title: string; blurb: string }> = [
+  { href: "/grid", title: "Grid", blurb: "Live demand, the generation mix, the state-wise board, grid stress, and weather-driven demand." },
+  { href: "/carbon", title: "Carbon", blurb: "How clean the grid is right now, when to run heavy loads, and your own cost and footprint." },
+  { href: "/renewables", title: "Solar & wind", blurb: "The duck curve, a live solar/wind split, a rooftop-solar calculator, and the state leaders." },
+  { href: "/coal", title: "Coal & fuel", blurb: "Daily coal stock at power plants — the real early warning before load-shedding." },
+  { href: "/petroleum", title: "Petroleum", blurb: "Where your fuel money goes, crude imports, ethanol blending, and cooking-fuel costs." },
+  { href: "/ev", title: "EV charging", blurb: "Every station we can verify, mapped in 3D, plus petrol vs CNG vs electric running costs." },
+  { href: "/generation", title: "Generation", blurb: "How India's electricity is made each day, and where the official record lives." },
+  { href: "/storage", title: "Storage", blurb: "Batteries and pumped-hydro on the grid, and the tender pipeline behind them." },
+  { href: "/records", title: "Records", blurb: "The extremes this site's own 15-minute sampling has caught." },
+  { href: "/scoreboard", title: "Scoreboard", blurb: "Dated, falsifiable grid forecasts that grade themselves." },
+  { href: "/data", title: "Open data", blurb: "Download the 15-minute grid series. Free, no key, CC BY 4.0." },
+  { href: "/status", title: "System status", blurb: "Live proof the data pipeline is actually flowing." },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-col gap-16 pb-8">
@@ -53,6 +68,25 @@ export default function Home() {
           <Suspense fallback={<div className="urja-panel h-20 animate-pulse" />}><CleanHourBadge /></Suspense>
           <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><LoadCurve /></Suspense>
           <Suspense fallback={<div className="urja-panel h-72 animate-pulse" />}><PowerBoard /></Suspense>
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-6">
+          <p className="urja-kicker">Explore the desks</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight">Every corner of India&apos;s energy, decoded.</h2>
+          <p className="mt-2 max-w-2xl text-sm text-slate-400">From the live grid to the fuel in your tank and the panels on your roof — each desk answers a different question, honestly.</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {desks.map((desk) => (
+            <Link key={desk.href} href={desk.href} className="urja-panel group p-5 transition hover:border-cyan-200/30">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-white">{desk.title}</h3>
+                <span className="text-cyan-300/60 transition group-hover:translate-x-0.5 group-hover:text-cyan-200" aria-hidden="true">→</span>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">{desk.blurb}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
