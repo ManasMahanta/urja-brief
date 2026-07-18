@@ -80,6 +80,21 @@ const SECTIONS = {
       ].filter(Boolean).join("\n");
     },
   },
+  "coal-stock": {
+    title: "How much coal India's power plants have",
+    async context() {
+      const { getCoalStock } = await import("@/lib/coal");
+      const coal = await getCoalStock();
+      if (!coal) return null;
+      return [
+        `India's coal-fired power plants are together holding about ${(coal.totalStockKt / 1000).toFixed(1)} million tonnes of coal — roughly ${coal.daysOfStock.toFixed(1)} days' worth at normal running (CEA daily report, as on ${coal.asOn}).`,
+        `${coal.criticalPlants} plants are at "critical" stock — meaning they hold less than a quarter of the coal they're supposed to keep in reserve.`,
+        `That's ${coal.pctOfNormative}% of the total reserve the fleet is meant to hold.`,
+        "Why this matters: coal makes most of India's electricity, so if plant stocks run low and trains/mines can't refill them fast enough, some plants may have to cut generation — the usual cause of supply-driven power cuts.",
+        "This is a national snapshot for one day; a shortage usually shows up in a few regions first, and this number alone doesn't say where.",
+      ].join("\n");
+    },
+  },
   "storage-dispatch": {
     title: "Storage on the grid",
     async context() {
