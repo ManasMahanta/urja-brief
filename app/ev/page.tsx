@@ -27,7 +27,6 @@ async function EvMap() {
   return (
     <>
       <EvMapLoader
-        states={states}
         stations={stations.map((s) => ({
           name: s.name,
           city: s.city,
@@ -37,7 +36,6 @@ async function EvMap() {
           source: s.source,
           pricing: s.pricing,
         }))}
-        countsByState={countsByState}
       />
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
         <section className="urja-panel p-5">
