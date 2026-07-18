@@ -138,6 +138,65 @@ function updateRollup(daySamples, day) {
   writeJson(file, rollup);
 }
 
+const addDays = (dateStr, n) => {
+  const d = new Date(dateStr + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+
+// ISO week key (YYYY-Www) — one auto-forecast per calendar week.
+const isoWeek = (dateStr) => {
+  const d = new Date(dateStr + "T00:00:00Z");
+  const dow = (d.getUTCDay() + 6) % 7; // Mon=0
+  d.setUTCDate(d.getUTCDate() - dow + 3); // nearest Thursday
+  const firstThu = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  const week = 1 + Math.round(((d - firstThu) / 86_400_000 - 3 + ((firstThu.getUTCDay() + 6) % 7)) / 7);
+  return `${d.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+};
+
+// Daily peaks over the last 14 days, from the rollup files.
+const recentPeaks = (day) => {
+  const months = [...new Set([day.slice(0, 7), addDays(day, -31).slice(0, 7)])];
+  const peaks = [];
+  for (const month of months) {
+    const rollup = readJson(path.join(ROOT, "data/rollups", `${month}.json`), {});
+    for (const [date, roll] of Object.entries(rollup)) {
+      if (date >= addDays(day, -14) && date <= day && roll.peakMw) peaks.push(roll.peakMw);
+    }
+  }
+  return peaks;
+};
+
+// Once a week, publish a dated, falsifiable peak-demand call into
+// data/forecasts.json. The scoreboard grades it automatically against the
+// observed rollups — the site predicting, then holding itself to account, with
+// no human in the loop. Guarded so it can never disturb the sampling above.
+function maybeGenerateForecast(day) {
+  const file = path.join(ROOT, "data/forecasts.json");
+  const forecasts = readJson(file, []);
+  const id = `auto-peak-${isoWeek(day)}`;
+  if (forecasts.some((f) => f.id === id)) return; // one per week
+  const peaks = recentPeaks(day);
+  if (peaks.length < 3) return; // not enough history to project honestly
+  const recentMax = Math.max(...peaks);
+  const target = Math.round(recentMax / 1000) * 1000; // nearest GW
+  const resolvesOn = addDays(day, 7);
+  forecasts.push({
+    id,
+    auto: true,
+    madeOn: day,
+    horizon: `By ${resolvesOn}`,
+    claim: `All-India demand met tops ${Math.round(target / 1000)} GW at least once in the next 7 days.`,
+    basis: `Auto-generated from our sampling: daily peaks have reached about ${Math.round(recentMax / 1000)} GW over the last two weeks, so a similar high in the week ahead is the call.`,
+    resolvesOn,
+    metric: "peakDemandMw",
+    direction: "above",
+    target,
+  });
+  writeJson(file, forecasts);
+  console.log(`forecast added: ${id} (peak > ${target} MW by ${resolvesOn})`);
+}
+
 try {
   const sample = await fetchSnapshot();
 
@@ -177,4 +236,11 @@ try {
   // Exit clean: a missed sample is an honest gap, and the workflow should not
   // go red every time a government dashboard hiccups.
   console.log(`no sample written: ${error.message}`);
+}
+
+// Independent of this tick's sampling — the weekly call reads existing rollups.
+try {
+  maybeGenerateForecast(istDate());
+} catch (error) {
+  console.log(`forecast skipped: ${error.message}`);
 }

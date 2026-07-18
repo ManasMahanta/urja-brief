@@ -77,7 +77,10 @@ export default async function ScoreboardPage() {
                       {f.resolvedEarly ? " · early" : ""}
                     </span>
                   </div>
-                  <span className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+                  <span className="flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+                    {f.auto && (
+                      <span className="rounded border border-cyan-200/20 px-1.5 py-0.5 text-cyan-200/70">auto</span>
+                    )}
                     Made {f.madeOn} · {f.horizon}
                   </span>
                 </div>
