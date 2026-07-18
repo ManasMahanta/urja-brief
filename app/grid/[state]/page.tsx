@@ -6,6 +6,9 @@ import capacity from "@/data/re-capacity.json";
 
 export const revalidate = 600;
 export const dynamicParams = true;
+// Live MERIT state POSTs + the retrying grid snapshot can run long; give the
+// render room so a slow upstream falls back gracefully instead of 500-ing.
+export const maxDuration = 30;
 
 export async function generateStaticParams() {
   const states = await getStateList();
