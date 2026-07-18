@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getGridSnapshot, getStateBySlug, getStateList, stateSlug } from "@/lib/grid-live";
 import { getStateSeries } from "@/lib/samples";
+import capacity from "@/data/re-capacity.json";
 
 export const revalidate = 600;
 export const dynamicParams = true;
@@ -11,12 +12,21 @@ export async function generateStaticParams() {
   return states.map((state) => ({ state: stateSlug(state.name) }));
 }
 
+const reCapacityFor = (name: string) =>
+  capacity.states.find((s) => s.state.toLowerCase() === name.toLowerCase());
+
+const gw = (mw: number) => `${(mw / 1000).toFixed(1)} GW`;
+
 export async function generateMetadata({ params }: { params: Promise<{ state: string }> }) {
   const { state } = await params;
   const name = state.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const re = reCapacityFor(name);
+  const reLine = re ? ` ${name} has ${gw(re.solar)} of solar and ${gw(re.wind)} of wind capacity.` : "";
   return {
-    title: `${name} — Grid`,
-    description: `Current power position for ${name}: demand met, own generation, and import, from the Ministry of Power's MERIT dashboard.`,
+    title: `${name} power grid — live electricity demand today`,
+    description: `Live electricity demand, own generation, and imports for ${name}, sampled from the Ministry of Power's MERIT dashboard.${reLine} Every figure marked by source and time.`,
+    keywords: [`${name} electricity demand`, `${name} power grid`, `${name} power cut`, `${name} renewable energy`, "India power"],
+    alternates: { canonical: `/grid/${state}` },
   };
 }
 
@@ -97,6 +107,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
   if (!result) notFound();
   const { state, power } = result;
   const series = await getStateSeries(state.code);
+  const re = reCapacityFor(state.name);
 
   const nationalShare =
     power && snapshot ? (power.demandMetMw / snapshot.demandMetMw) * 100 : null;
@@ -159,6 +170,31 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
       )}
 
       <StateCurve series={series} name={state.name} />
+
+      {re && (
+        <section className="urja-panel p-5 sm:p-6">
+          <p className="urja-kicker">{state.name}&apos;s renewable build-out</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-amber-300/20 bg-amber-300/[0.05] p-4">
+              <p className="text-xs text-slate-400">Solar capacity installed</p>
+              <p className="mt-1 font-mono text-3xl font-semibold text-amber-300">{gw(re.solar)}</p>
+            </div>
+            <div className="rounded-xl border border-sky-400/20 bg-sky-400/[0.05] p-4">
+              <p className="text-xs text-slate-400">Wind capacity installed</p>
+              <p className="mt-1 font-mono text-3xl font-semibold text-sky-300">{gw(re.wind)}</p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+            {state.name} has built {gw(re.solar)} of solar and {gw(re.wind)} of wind capacity
+            (MNRE, {capacity.asOf}). That capacity feeds the national grid, so the state&apos;s live
+            demand above is met by a mix of its own plants and power imported across the network —
+            which is why importing electricity is normal, not a sign of shortage.
+          </p>
+          <Link href="/renewables" className="mt-3 inline-block text-sm font-semibold text-cyan-300 hover:text-white">
+            Compare every state&apos;s renewables →
+          </Link>
+        </section>
+      )}
 
       <section className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-amber-200">Reading note</p>
