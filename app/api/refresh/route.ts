@@ -21,9 +21,11 @@ export async function GET(request: Request) {
 
   revalidatePath("/");
   revalidatePath("/grid");
+  revalidatePath("/carbon");
   revalidatePath("/generation");
   revalidatePath("/storage");
   revalidatePath("/records");
+  revalidatePath("/scoreboard");
   revalidatePath("/ev");
   revalidatePath("/policy");
   revalidateTag("urja-power-brief", "max");

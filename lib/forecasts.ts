@@ -1,0 +1,109 @@
+// The forecast scoreboard — the accountability feature. We publish dated,
+// falsifiable calls about the grid, then let the SAME 15-minute sampling that
+// underpins the records desk grade them. No hand-marking: a call resolves to
+// hit or miss automatically against the observed daily rollups, so the site
+// can't quietly forget a bad prediction. That self-scoring is the differentiator.
+
+import fs from "node:fs";
+import path from "node:path";
+import { getRecentRollups, istDate, type DayRollup } from "@/lib/samples";
+
+const SAMPLES_REPO = process.env.GITHUB_REPO ?? "ManasMahanta/urja-brief";
+
+export type Forecast = {
+  id: string;
+  madeOn: string; // IST date the call was published
+  horizon: string; // human label, e.g. "By 25 Jul 2026"
+  claim: string;
+  basis: string;
+  resolvesOn: string; // IST date after which a still-unmet call is a miss
+  metric: "peakDemandMw" | "maxRePct";
+  direction: "above" | "below";
+  target: number;
+  // Optional manual override for a call the sampler can't grade itself.
+  status?: "hit" | "miss";
+  actual?: number;
+  note?: string;
+};
+
+export type Resolved = Forecast & {
+  result: "hit" | "miss" | "pending";
+  observed: number | null; // best value seen in the window so far
+  resolvedEarly: boolean; // hit before its resolve date
+};
+
+async function readForecasts(): Promise<Forecast[]> {
+  try {
+    const response = await fetch(
+      `https://raw.githubusercontent.com/${SAMPLES_REPO}/main/data/forecasts.json`,
+      { next: { revalidate: 300 } },
+    );
+    if (response.ok) return (await response.json()) as Forecast[];
+  } catch {
+    // fall through to the local copy
+  }
+  try {
+    return JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "data/forecasts.json"), "utf8"),
+    ) as Forecast[];
+  } catch {
+    return [];
+  }
+}
+
+// Best observed value for a metric across the rollup days inside the window.
+function bestInWindow(
+  rollups: Array<{ date: string } & DayRollup>,
+  forecast: Forecast,
+): number | null {
+  const inWindow = rollups.filter((day) => day.date >= forecast.madeOn && day.date <= forecast.resolvesOn);
+  if (!inWindow.length) return null;
+  const values =
+    forecast.metric === "peakDemandMw" ? inWindow.map((d) => d.peakMw) : inWindow.map((d) => d.maxRePct);
+  // "above" cares about the max seen; "below" about the min.
+  return forecast.direction === "above" ? Math.max(...values) : Math.min(...values);
+}
+
+function resolve(forecast: Forecast, rollups: Array<{ date: string } & DayRollup>, today: string): Resolved {
+  // A hand-graded call is taken as-is.
+  if (forecast.status === "hit" || forecast.status === "miss") {
+    return { ...forecast, result: forecast.status, observed: forecast.actual ?? null, resolvedEarly: false };
+  }
+
+  const observed = bestInWindow(rollups, forecast);
+  const met =
+    observed !== null &&
+    (forecast.direction === "above" ? observed >= forecast.target : observed <= forecast.target);
+
+  if (met) {
+    return { ...forecast, result: "hit", observed, resolvedEarly: today < forecast.resolvesOn };
+  }
+  if (today > forecast.resolvesOn) {
+    return { ...forecast, result: "miss", observed, resolvedEarly: false };
+  }
+  return { ...forecast, result: "pending", observed, resolvedEarly: false };
+}
+
+export type Scoreboard = {
+  forecasts: Resolved[];
+  tally: { hit: number; miss: number; pending: number; hitRate: number | null };
+};
+
+export async function getScoreboard(): Promise<Scoreboard> {
+  const [forecasts, rollups] = await Promise.all([readForecasts(), getRecentRollups()]);
+  const today = istDate(0);
+  const resolved = forecasts
+    .map((forecast) => resolve(forecast, rollups, today))
+    // Newest call first; pending above settled so the open bets read at the top.
+    .sort((a, b) => (a.madeOn < b.madeOn ? 1 : a.madeOn > b.madeOn ? -1 : 0));
+
+  const hit = resolved.filter((r) => r.result === "hit").length;
+  const miss = resolved.filter((r) => r.result === "miss").length;
+  const pending = resolved.filter((r) => r.result === "pending").length;
+  const settled = hit + miss;
+
+  return {
+    forecasts: resolved,
+    tally: { hit, miss, pending, hitRate: settled ? hit / settled : null },
+  };
+}

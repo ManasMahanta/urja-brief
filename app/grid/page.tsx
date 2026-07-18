@@ -3,6 +3,7 @@ import Link from "next/link";
 import GridPulse from "@/components/urja/GridPulse";
 import LoadCurve from "@/components/urja/LoadCurve";
 import StateBoard from "@/components/urja/StateBoard";
+import StressBadge from "@/components/urja/StressBadge";
 
 // ISR: the page (and with it the ~35 uncached MERIT state POSTs) re-renders at
 // most every 10 minutes, matching the desk's "instantaneous, as fetched" label.
@@ -34,6 +35,10 @@ export default function GridPage() {
 
       <Suspense fallback={<div className="urja-panel h-56 animate-pulse" />}>
         <GridPulse />
+      </Suspense>
+
+      <Suspense fallback={<div className="urja-panel h-28 animate-pulse" />}>
+        <StressBadge />
       </Suspense>
 
       <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}>

@@ -63,6 +63,23 @@ const SECTIONS = {
       ].join("\n");
     },
   },
+  "carbon-intensity": {
+    title: "How clean the grid is right now",
+    async context() {
+      const { getCarbonNow } = await import("@/lib/carbon");
+      const carbon = await getCarbonNow();
+      if (!carbon) return null;
+      return [
+        `Right now each unit of electricity (kWh) on India's grid carries about ${Math.round(carbon.intensityGco2)} grams of CO2. This is worked out live from what is generating: coal is dirty, gas less so, and solar/wind/hydro/nuclear add almost no CO2 as they run.`,
+        carbon.today
+          ? `Across today's samples it has ranged from about ${Math.round(carbon.today.min)} to ${Math.round(carbon.today.max)} grams per kWh (median ${Math.round(carbon.today.median)}).`
+          : "There aren't enough samples yet today to say what's usual.",
+        carbon.verdict ? `Verdict for this hour: ${carbon.verdict.headline}. ${carbon.verdict.detail}` : "",
+        "The practical idea: run heavy things (geyser, washing machine, EV charging) in the cleaner hours — usually the sunny afternoon when solar is strong — rather than the coal-heavy evening peak.",
+        "This is an estimate of what's burning right now, not an official audited emissions number.",
+      ].filter(Boolean).join("\n");
+    },
+  },
   "storage-dispatch": {
     title: "Storage on the grid",
     async context() {

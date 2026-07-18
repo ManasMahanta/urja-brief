@@ -1,0 +1,24 @@
+[
+  {
+    "id": "2026-07-peak-270",
+    "madeOn": "2026-07-18",
+    "horizon": "By 25 Jul 2026",
+    "claim": "All-India demand met tops 270 GW at least once this week.",
+    "basis": "Our own sampling already caught 269.4 GW on 17 Jul; a monsoon lull with high heat-and-humidity load usually nudges the national peak past 270 GW.",
+    "resolvesOn": "2026-07-25",
+    "metric": "peakDemandMw",
+    "direction": "above",
+    "target": 270000
+  },
+  {
+    "id": "2026-07-re-34",
+    "madeOn": "2026-07-18",
+    "horizon": "By 25 Jul 2026",
+    "claim": "Renewables' share of generation tops 34% on at least one midday this week.",
+    "basis": "We observed 32.8% on 17 Jul; clear post-monsoon afternoons lift solar output and push the instantaneous renewable share higher.",
+    "resolvesOn": "2026-07-25",
+    "metric": "maxRePct",
+    "direction": "above",
+    "target": 34
+  }
+]

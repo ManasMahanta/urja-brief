@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import EvMapLoader from "@/components/ev/EvMapLoader";
+import RunningCost from "@/components/ev/RunningCost";
 import ExplainButton from "@/components/urja/ExplainButton";
 import { countStationsByState, getChargingStations, getIndiaStates, getOfficialCounts } from "@/lib/ev";
 import { getEvHeadlines } from "@/lib/power";
@@ -155,6 +156,8 @@ export default function EvPage() {
       >
         <EvMap />
       </Suspense>
+
+      <RunningCost />
 
       <Suspense fallback={null}>
         <OfficialCounts />

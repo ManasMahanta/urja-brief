@@ -1,0 +1,30 @@
+{
+  "unit": "INR per kWh",
+  "note": "Approximate domestic mid-slab tariff. India's residential tariffs are slabbed and set per DISCOM, so your actual rate depends on your utility and monthly units. Use these as reference, not as your bill.",
+  "asOf": "2026",
+  "national": 7.0,
+  "states": {
+    "Maharashtra": 8.8,
+    "Delhi": 6.5,
+    "Karnataka": 8.0,
+    "Tamil Nadu": 6.0,
+    "Gujarat": 5.5,
+    "Uttar Pradesh": 6.5,
+    "Rajasthan": 7.5,
+    "Telangana": 8.5,
+    "West Bengal": 8.2,
+    "Kerala": 7.0,
+    "Punjab": 7.0,
+    "Haryana": 7.0,
+    "Madhya Pradesh": 7.0,
+    "Andhra Pradesh": 7.5,
+    "Bihar": 7.5,
+    "Odisha": 6.0,
+    "Jharkhand": 6.5,
+    "Assam": 7.5,
+    "Chhattisgarh": 6.0,
+    "Uttarakhand": 6.5,
+    "Himachal Pradesh": 5.5,
+    "Goa": 5.0
+  }
+}

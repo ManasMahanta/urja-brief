@@ -107,6 +107,21 @@ export async function getRecentRollups(): Promise<Array<{ date: string } & DayRo
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+// One IST day's samples (oldest first), for the open-data export endpoint.
+export async function getDaySamples(date: string): Promise<GridSample[]> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return [];
+  return readDay(date);
+}
+
+// The last `days` IST days of samples, flattened oldest-first. Used to build a
+// typical-by-hour profile (the clean-hour forecast). Thin until the 15-minute
+// sampler runs continuously — callers must handle a short series honestly.
+export async function getRecentSamples(days: number): Promise<GridSample[]> {
+  const dates = Array.from({ length: Math.max(1, days) }, (_, i) => istDate(-i));
+  const arrays = await Promise.all(dates.map(readDay));
+  return arrays.reverse().flat();
+}
+
 // A single state's [time, demandMw] series for today, from the per-state
 // readings the sampler records for major states.
 export async function getStateSeries(code: string): Promise<Array<{ t: string; demandMw: number }>> {

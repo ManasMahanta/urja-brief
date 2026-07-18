@@ -19,6 +19,11 @@ export default function SubscribePage() {
         signal for the curious, and the transition, fuel, and policy desks for
         everyone in between. Educational only, never advice.
       </p>
+      <p className="rounded-xl border border-amber-300/25 bg-amber-300/[0.06] px-4 py-3 text-sm leading-relaxed text-amber-100/80">
+        <span className="font-semibold text-amber-200">Grid-stress alerts:</span> subscribers are
+        first in line for a heads-up when our live signal shows the grid moving into a stressed hour —
+        demand near its sampled peak, or coal carrying the load with little renewable support.
+      </p>
       <SignupForm />
       <p className="text-sm text-zinc-500 dark:text-zinc-400">
         Want to see it first?{" "}
