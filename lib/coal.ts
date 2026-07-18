@@ -25,10 +25,10 @@ export type CoalStock = {
 
 const pad = (n: string) => n;
 
-function istYmd(offsetDays: number): { y: string; m: string; d: string } {
+function istYmd(daysAgo: number): { y: string; m: string; d: string } {
   const s = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(
-    new Date(Date.now() + offsetDays * 86_400_000),
-  ); // YYYY-MM-DD
+    new Date(Date.now() - daysAgo * 86_400_000),
+  ); // YYYY-MM-DD, `daysAgo` into the past (the report lags ~1 day)
   const [y, m, d] = s.split("-");
   return { y, m, d };
 }
