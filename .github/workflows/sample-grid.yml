@@ -1,0 +1,38 @@
+name: Sample the grid
+
+# Samples MERIT every 15 minutes into data/samples/ (repo-as-database).
+# GitHub may delay scheduled runs by a few minutes under load — gaps in the
+# series are expected and the charts tolerate them.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sample-grid
+  cancel-in-progress: false
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/sample-grid.mjs
+      - name: Commit sample
+        run: |
+          if git diff --quiet -- data; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git config user.name "urja-brief-sampler"
+          git config user.email "manasmahanta10@gmail.com"
+          git add data
+          git commit -m "data: grid sample $(TZ=Asia/Kolkata date '+%Y-%m-%d %H:%M') IST"
+          git pull --rebase origin main
+          git push
