@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import CleanHourBadge from "@/components/urja/CleanHourBadge";
+import GridStory from "@/components/urja/GridStory";
 import GridPulse from "@/components/urja/GridPulse";
 import LoadCurve from "@/components/urja/LoadCurve";
 import PowerBoard from "@/components/urja/PowerBoard";
@@ -47,6 +48,7 @@ export default function Home() {
           <p className="max-w-sm text-sm text-slate-400">Live market data is labelled as market context. Official reporting remains the source of record for the physical system.</p>
         </div>
         <div className="flex flex-col gap-5">
+          <Suspense fallback={<div className="urja-panel h-28 animate-pulse" />}><GridStory /></Suspense>
           <Suspense fallback={<div className="urja-panel h-56 animate-pulse" />}><GridPulse /></Suspense>
           <Suspense fallback={<div className="urja-panel h-20 animate-pulse" />}><CleanHourBadge /></Suspense>
           <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><LoadCurve /></Suspense>
