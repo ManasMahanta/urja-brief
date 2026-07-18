@@ -34,35 +34,29 @@ const FUELS = ["thermal", "gas", "nuclear", "hydro", "renewable", "storage", "ot
 // continuous). Codes are MERIT's own.
 const STATES = ["MHA", "UP", "GJT", "TND", "KRT", "RJ", "TLG", "MPD", "DL", "PNB", "BGL", "BHR"];
 
+// meritindia.in is an Indian government site that isn't reachable from GitHub's
+// US-based runners ("fetch failed"), so we sample via our own /api/grid, which
+// reaches MERIT from Vercel's Mumbai region and returns the same snapshot as
+// clean JSON. Override with SAMPLE_SOURCE_URL if the deployment moves.
+const GRID_API = process.env.SAMPLE_SOURCE_URL || "https://urja-brief.vercel.app/api/grid";
+
 async function fetchSnapshot() {
-  const response = await fetch(MERIT, {
-    headers: { "User-Agent": UA },
+  const response = await fetch(GRID_API, {
+    headers: { "User-Agent": UA, Accept: "application/json" },
     signal: AbortSignal.timeout(20_000),
   });
-  if (!response.ok) throw new Error(`MERIT HTTP ${response.status}`);
-  const html = (await response.text()).replace(/\s+/g, " ");
-
-  const fields = {};
-  for (const match of html.matchAll(/<span class="counter">\s*([\d,]+)\s*<\/span>/g)) {
-    const context = html
-      .slice(Math.max(0, match.index - 400), match.index)
-      .replace(/<[^>]*>/g, " ");
-    const label = context.match(/\b(DEMAND|THERMAL|GAS|NUCLEAR|HYDRO|RENEWABLE|STORAGE|OTHER)\b/g);
-    if (!label) continue;
-    const key = label[label.length - 1].toLowerCase();
-    if (!(key in fields)) fields[key] = Number(match[1].replace(/,/g, ""));
+  if (!response.ok) throw new Error(`grid API HTTP ${response.status}`);
+  const data = await response.json();
+  if (typeof data.demandMetMw !== "number" || !data.mixMw) {
+    throw new Error("grid API missing fields (MERIT may be down)");
   }
-  if (typeof fields.demand !== "number" || typeof fields.thermal !== "number") {
-    throw new Error("MERIT parse failed — page layout may have changed");
-  }
-
-  const mix = Object.fromEntries(FUELS.map((fuel) => [fuel, fields[fuel] ?? 0]));
+  const mix = Object.fromEntries(FUELS.map((fuel) => [fuel, data.mixMw[fuel] ?? 0]));
   const total = Object.values(mix).reduce((sum, mw) => sum + mw, 0);
-  if (total <= 0) throw new Error("MERIT parse produced zero generation");
+  if (total <= 0) throw new Error("grid API produced zero generation");
 
   return {
     t: new Date().toISOString(),
-    demandMw: fields.demand,
+    demandMw: data.demandMetMw,
     mix,
     rePct: Number(((mix.renewable / total) * 100).toFixed(2)),
   };
@@ -200,17 +194,6 @@ function maybeGenerateForecast(day) {
 try {
   const sample = await fetchSnapshot();
 
-  // Major states, in small batches; failures just drop out of this tick.
-  const states = {};
-  for (let i = 0; i < STATES.length; i += 6) {
-    const batch = STATES.slice(i, i + 6);
-    const rows = await Promise.all(batch.map((code) => fetchState(code)));
-    batch.forEach((code, j) => {
-      if (rows[j]) states[code] = rows[j];
-    });
-  }
-  if (Object.keys(states).length) sample.states = states;
-
   const day = istDate();
   const file = path.join(ROOT, "data/samples", `${day}.json`);
   const existing = readJson(file, []);
@@ -229,7 +212,7 @@ try {
   }
   console.log(
     fresh
-      ? `sampled ${sample.demandMw} MW, RE ${sample.rePct}%, ${Object.keys(states).length} states → ${path.basename(file)} (${existing.length} points)`
+      ? `sampled ${sample.demandMw} MW, RE ${sample.rePct}% → ${path.basename(file)} (${existing.length} points)`
       : "no append (last sample under 5 minutes old); records/rollups refolded",
   );
 } catch (error) {
