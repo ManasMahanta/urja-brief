@@ -80,6 +80,21 @@ const SECTIONS = {
       ].filter(Boolean).join("\n");
     },
   },
+  "renewables-split": {
+    title: "How much is solar vs wind right now",
+    async context() {
+      const { getEstimatedReSplit } = await import("@/lib/renewables");
+      const split = await getEstimatedReSplit();
+      if (!split) return null;
+      const mw = (v: number) => `${Math.round(v).toLocaleString("en-IN")} MW`;
+      return [
+        `Right now India's grid is getting about ${mw(split.renewableMw)} from renewables. We estimate roughly ${mw(split.solarMw)} of that is solar and ${mw(split.windOtherMw)} is wind and other renewables — solar is about ${split.solarSharePct.toFixed(0)}% of it.`,
+        "Why it's an estimate: the government dashboard reports renewables as a single number. But solar panels make nothing after dark, so whatever renewable power is flowing at night must be wind (and a little hydro/biomass). We treat that night-time level as the wind baseline and count the daytime rise above it as solar.",
+        "So this is a smart guess from the daily pattern, not a directly measured split — wind also changes through the day, which this can't perfectly separate.",
+        "The big picture it shows: solar dominates the middle of the day, then fades at sunset just as demand peaks — which is why evenings lean on coal.",
+      ].join("\n");
+    },
+  },
   "coal-stock": {
     title: "How much coal India's power plants have",
     async context() {

@@ -1,0 +1,21 @@
+{
+  "source": "Ministry of New and Renewable Energy (MNRE), state-wise installed capacity",
+  "asOf": "2026-05-31",
+  "note": "Approximate figures from MNRE physical-progress reporting. Capacity is added every month, so treat these as reference points, not a live feed.",
+  "unit": "MW",
+  "nationalMw": { "solar": 140600, "wind": 56807, "largeHydro": 51965, "bioPower": 11748, "smallHydro": 5179 },
+  "states": [
+    { "state": "Rajasthan", "solar": 42166, "wind": 5900 },
+    { "state": "Gujarat", "solar": 32303, "wind": 13000 },
+    { "state": "Maharashtra", "solar": 20276, "wind": 5300 },
+    { "state": "Tamil Nadu", "solar": 13909, "wind": 11500 },
+    { "state": "Karnataka", "solar": 11347, "wind": 6400 },
+    { "state": "Madhya Pradesh", "solar": 8500, "wind": 2900 },
+    { "state": "Andhra Pradesh", "solar": 6600, "wind": 4100 },
+    { "state": "Telangana", "solar": 5800, "wind": 128 },
+    { "state": "Uttar Pradesh", "solar": 3500, "wind": 0 },
+    { "state": "Haryana", "solar": 1600, "wind": 0 },
+    { "state": "Punjab", "solar": 1300, "wind": 0 },
+    { "state": "Kerala", "solar": 1200, "wind": 65 }
+  ]
+}
