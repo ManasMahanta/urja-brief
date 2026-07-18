@@ -56,7 +56,15 @@ export type CarbonNow = {
   today: { min: number; max: number; median: number; count: number } | null;
   // How the current reading sits inside today's range, and a plain verdict.
   verdict: { tone: CleanTone; headline: string; detail: string } | null;
+  // Live emissions, derived from the mix (all from the snapshot — no samples).
+  rateTonnesPerHour: number; // CO2 the grid is emitting right now
+  avoidedTonnesPerHour: number; // CO2 clean power is keeping out of the air now
+  cleanGenMw: number; // renewable + hydro + nuclear + storage
 };
+
+// What an *extra* kWh of demand actually causes: in India the marginal plant is
+// almost always coal, so the marginal factor is far above the average intensity.
+export const MARGINAL_GCO2 = EMISSION_FACTORS.thermal;
 
 const median = (values: number[]): number => {
   const sorted = [...values].sort((a, b) => a - b);
@@ -109,7 +117,13 @@ export async function getCarbonNow(): Promise<CarbonNow | null> {
     }
   }
 
-  return { snapshot, intensityGco2, today, verdict };
+  // Emissions rate: generation (MW) × intensity (g/kWh) ÷ 1000 = tonnes/hour.
+  const rateTonnesPerHour = (snapshot.totalGenerationMw * intensityGco2) / 1000;
+  // Zero-carbon generation right now; if it were coal instead, that's the CO2 avoided.
+  const cleanGenMw = snapshot.mix.renewable + snapshot.mix.hydro + snapshot.mix.nuclear + snapshot.mix.storage;
+  const avoidedTonnesPerHour = (cleanGenMw * EMISSION_FACTORS.thermal) / 1000;
+
+  return { snapshot, intensityGco2, today, verdict, rateTonnesPerHour, avoidedTonnesPerHour, cleanGenMw };
 }
 
 export const TONE_COLOR: Record<CleanTone, { text: string; ring: string; dot: string }> = {

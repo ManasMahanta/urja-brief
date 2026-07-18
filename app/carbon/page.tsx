@@ -4,7 +4,21 @@ import CleanHourForecast from "@/components/urja/CleanHourForecast";
 import CostCalculator from "@/components/urja/CostCalculator";
 import EmbedSnippet from "@/components/urja/EmbedSnippet";
 import ExplainButton from "@/components/urja/ExplainButton";
-import { getCarbonNow, FACTOR_NOTE, TONE_COLOR } from "@/lib/carbon";
+import { getCarbonNow, FACTOR_NOTE, TONE_COLOR, MARGINAL_GCO2 } from "@/lib/carbon";
+
+// Grid carbon intensity elsewhere, for context (approximate recent averages,
+// gCO2/kWh). India's own figure is read live and slotted in.
+const WORLD_GRIDS: Array<{ name: string; g: number }> = [
+  { name: "Norway", g: 30 },
+  { name: "France", g: 56 },
+  { name: "EU average", g: 250 },
+  { name: "Germany", g: 350 },
+  { name: "United States", g: 369 },
+  { name: "World average", g: 480 },
+  { name: "China", g: 538 },
+];
+
+const tph = (v: number) => `${Math.round(v).toLocaleString("en-IN")} t/hr`;
 
 export const revalidate = 300;
 // Renders dynamically (live MERIT fetch with retries); give the retries room so
@@ -35,8 +49,13 @@ async function CarbonDesk() {
     );
   }
 
-  const { snapshot, intensityGco2, today, verdict } = carbon;
+  const { snapshot, intensityGco2, today, verdict, rateTonnesPerHour, avoidedTonnesPerHour, cleanGenMw } = carbon;
   const tone = verdict ? TONE_COLOR[verdict.tone] : TONE_COLOR.average;
+  const carYears = rateTonnesPerHour / 4.6; // avg car ~4.6 tCO2/yr
+  const treeYears = rateTonnesPerHour / 0.021; // a tree absorbs ~21 kg/yr
+  const worldRows = [...WORLD_GRIDS, { name: "India — right now", g: Math.round(intensityGco2), live: true }]
+    .sort((a, b) => a.g - b.g);
+  const worldMax = Math.max(...worldRows.map((r) => r.g));
   // Where the current reading sits inside today's range (0 = cleanest seen today).
   const band =
     today && today.max > today.min
@@ -99,6 +118,88 @@ async function CarbonDesk() {
         <div className="mt-3">
           <ExplainButton section="carbon-intensity" />
         </div>
+      </section>
+
+      {/* #1 — emissions rate + relatable equivalences */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">What the grid is emitting right now</p>
+        <div className="mt-4 flex flex-wrap items-end gap-x-10 gap-y-3">
+          <div>
+            <p className="text-sm text-slate-400">CO<sub>2</sub> emission rate</p>
+            <p className="mt-1 font-mono text-4xl font-semibold text-white sm:text-5xl">
+              {Math.round(rateTonnesPerHour).toLocaleString("en-IN")}
+              <span className="ml-2 text-lg font-normal text-slate-400">tonnes/hr</span>
+            </p>
+          </div>
+          <p className="text-sm text-slate-400">≈ <span className="font-mono text-slate-200">{(rateTonnesPerHour / 3.6).toFixed(1)} kg</span> every second</p>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4 text-sm leading-relaxed text-slate-300">
+            Every hour, the grid emits as much CO<sub>2</sub> as about{" "}
+            <span className="font-mono font-semibold text-white">{Math.round(carYears).toLocaleString("en-IN")} cars</span>{" "}
+            do in a whole year.
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4 text-sm leading-relaxed text-slate-300">
+            It would take about{" "}
+            <span className="font-mono font-semibold text-white">{(treeYears / 1_000_000).toFixed(1)} million trees</span>{" "}
+            a full year to absorb one hour of it.
+          </div>
+        </div>
+      </section>
+
+      {/* #2 — CO2 avoided by clean power */}
+      <section className="rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.06] p-5 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-emerald-200">Clean power is working right now</p>
+        <p className="mt-3 text-lg leading-relaxed text-slate-200">
+          Renewables, hydro and nuclear are supplying{" "}
+          <span className="font-mono font-semibold text-emerald-200">{Math.round(cleanGenMw).toLocaleString("en-IN")} MW</span>{" "}
+          this instant — keeping roughly{" "}
+          <span className="font-mono font-semibold text-emerald-200">{tph(avoidedTonnesPerHour)}</span>{" "}
+          of CO<sub>2</sub> out of the air, versus burning coal for the same power.
+        </p>
+      </section>
+
+      {/* #4 — marginal vs average */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">Average vs marginal — what your extra load really causes</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Average intensity now</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{Math.round(intensityGco2)}<span className="ml-1 text-sm font-normal text-slate-400">g/kWh</span></p>
+          </div>
+          <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-4">
+            <p className="text-xs text-slate-400">Marginal — an extra unit of demand</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">~{MARGINAL_GCO2}<span className="ml-1 text-sm font-normal text-slate-400">g/kWh</span></p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">
+          The average is spread across everything generating now. But when you switch on one more
+          appliance, the grid meets it by ramping the cheapest spare plant — in India, almost always
+          coal. So the CO<sub>2</sub> your extra load actually causes is closer to the marginal figure
+          — which is exactly why shifting flexible loads to cleaner hours matters.
+        </p>
+      </section>
+
+      {/* #3 — India vs the world */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">India&apos;s grid vs the world</p>
+        <p className="mt-2 text-sm text-slate-400">Grid carbon intensity, gCO<sub>2</sub>/kWh — India&apos;s read live, the rest recent averages.</p>
+        <div className="mt-4 space-y-1.5">
+          {worldRows.map((r) => (
+            <div key={r.name} className="flex items-center gap-3">
+              <span className={`w-40 shrink-0 text-sm ${"live" in r && r.live ? "font-semibold text-cyan-200" : "text-slate-300"}`}>{r.name}</span>
+              <div className="relative h-6 flex-1 overflow-hidden rounded-md bg-slate-950/60">
+                <span className={`absolute inset-y-0 left-0 rounded-md ${"live" in r && r.live ? "bg-cyan-400/40" : "bg-slate-400/25"}`} style={{ width: `${(r.g / worldMax) * 100}%` }} aria-hidden="true" />
+                <span className="absolute inset-y-0 left-2.5 flex items-center font-mono text-xs text-slate-100">{r.g}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
+          India&apos;s grid is coal-heavy, so its intensity sits well above cleaner grids — which is
+          what makes every point of renewable share, and the 500 GW push, matter. Other figures are
+          approximate recent national averages.
+        </p>
       </section>
 
       <CleanHourForecast />
