@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getGridSnapshot, getStateBySlug, getStateList, stateSlug } from "@/lib/grid-live";
+import { getStateBySlug, getStateList, stateSlug } from "@/lib/grid-live";
 import { getStateSeries } from "@/lib/samples";
 import capacity from "@/data/re-capacity.json";
 
 export const revalidate = 600;
 export const dynamicParams = true;
-// Live MERIT state POSTs + the retrying grid snapshot can run long; give the
-// render room so a slow upstream falls back gracefully instead of 500-ing.
 export const maxDuration = 30;
 
 export async function generateStaticParams() {
@@ -106,14 +104,12 @@ function StateCurve({ series, name }: { series: Array<{ t: string; demandMw: num
 
 export default async function StatePage({ params }: { params: Promise<{ state: string }> }) {
   const { state: slug } = await params;
-  const [result, snapshot] = await Promise.all([getStateBySlug(slug), getGridSnapshot()]);
+  const result = await getStateBySlug(slug);
   if (!result) notFound();
   const { state, power } = result;
   const series = await getStateSeries(state.code);
   const re = reCapacityFor(state.name);
 
-  const nationalShare =
-    power && snapshot ? (power.demandMetMw / snapshot.demandMetMw) * 100 : null;
   const importShare =
     power && power.importMw !== null && power.demandMetMw > 0
       ? (power.importMw / power.demandMetMw) * 100
@@ -140,11 +136,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           <article className="urja-panel p-5">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-cyan-200/70">Demand met</p>
             <p className="mt-3 font-mono text-3xl font-semibold text-white">{mw(power.demandMetMw)}</p>
-            {nationalShare !== null && (
-              <p className="mt-2 text-xs text-slate-400">
-                {nationalShare.toFixed(1)}% of all-India demand met right now
-              </p>
-            )}
+            <p className="mt-2 text-xs text-slate-400">Electricity being used in the state right now</p>
           </article>
           <article className="urja-panel p-5">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-cyan-200/70">Own generation</p>
