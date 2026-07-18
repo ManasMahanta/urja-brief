@@ -7,6 +7,9 @@ import ExplainButton from "@/components/urja/ExplainButton";
 import { getCarbonNow, FACTOR_NOTE, TONE_COLOR } from "@/lib/carbon";
 
 export const revalidate = 300;
+// Renders dynamically (live MERIT fetch with retries); give the retries room so
+// a slow upstream falls back gracefully instead of timing the function out.
+export const maxDuration = 30;
 
 export const metadata = {
   title: "Carbon Intensity",

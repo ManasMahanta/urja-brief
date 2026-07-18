@@ -7,6 +7,10 @@ import PowerBoard from "@/components/urja/PowerBoard";
 import PowerBrief from "@/components/urja/PowerBrief";
 import PowerAnalyst from "@/components/urja/PowerAnalyst";
 
+// The live grid pulse fetches MERIT with retries, so this renders dynamically;
+// give it headroom so a slow upstream falls back gracefully.
+export const maxDuration = 30;
+
 const lenses = [
   ["Grid", "Demand, generation, regional balance, and the operational system."],
   ["Transition", "Renewables, storage, transmission, and the capacity being built."],

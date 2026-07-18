@@ -8,6 +8,7 @@ import StressBadge from "@/components/urja/StressBadge";
 // ISR: the page (and with it the ~35 uncached MERIT state POSTs) re-renders at
 // most every 10 minutes, matching the desk's "instantaneous, as fetched" label.
 export const revalidate = 600;
+export const maxDuration = 30;
 
 export const metadata = {
   title: "Grid",

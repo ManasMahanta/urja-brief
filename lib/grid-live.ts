@@ -22,6 +22,8 @@ const ua = "Mozilla/5.0 UrjaBrief/1.0";
 // intermediate to the default trust store completes the chain. Guarded:
 // tls.setDefaultCACertificates needs Node ≥ 22.15 — on older runtimes the
 // fetchers below simply keep returning null, which the UI reports honestly.
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import tls from "node:tls";
 import { EMSIGN_SSL_CA_G1 } from "@/lib/emsign-ca";
 
@@ -70,11 +72,14 @@ const num = (value: string): number => Number(value.replace(/,/g, ""));
 // The MERIT homepage renders each figure as a labelled block ending in
 // <span class="counter">N</span>. We walk the counters and read the fuel
 // label from the preceding markup.
-export async function getGridSnapshot(): Promise<GridSnapshot | null> {
+// One attempt at MERIT. Uncached (no-store) so a transient bad response is
+// never sticky, and each retry actually re-hits the upstream.
+async function fetchGridSnapshotOnce(): Promise<GridSnapshot | null> {
   try {
     const response = await fetch(MERIT, {
-      next: { revalidate: 300 },
+      cache: "no-store",
       headers: { "User-Agent": ua },
+      signal: AbortSignal.timeout(5_000),
     });
     if (!response.ok) return null;
     const html = (await response.text()).replace(/\s+/g, " ");
@@ -117,6 +122,21 @@ export async function getGridSnapshot(): Promise<GridSnapshot | null> {
     return null;
   }
 }
+
+// The live snapshot powering the home, /grid, and /carbon metrics. MERIT is
+// intermittently unreachable, so a single blip must not blank the whole desk:
+// retry a few times, uncached, before giving up. Wrapped in React cache() so
+// the several components that read it in one render share one fetch. Because
+// it's no-store, the pages render dynamically — always fresh, never a stale
+// "unavailable" baked into an ISR entry (the bug this replaces).
+export const getGridSnapshot = cache(async (): Promise<GridSnapshot | null> => {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const snapshot = await fetchGridSnapshotOnce();
+    if (snapshot) return snapshot;
+    if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 400));
+  }
+  return null;
+});
 
 type StateListEntry = { StateCode: string; StateName: string };
 
@@ -189,15 +209,23 @@ async function getStatePower(state: { code: string; name: string }): Promise<Sta
 }
 
 // Current demand met for every state MERIT lists, sorted by demand.
-// ~35 small POSTs, batched so MERIT never sees them all at once.
-export async function getStatewisePower(): Promise<StatePower[]> {
-  const states = await getStateList();
-  if (!states.length) return [];
-  const rows: Array<StatePower | null> = [];
-  for (let i = 0; i < states.length; i += 8) {
-    rows.push(...(await Promise.all(states.slice(i, i + 8).map((state) => getStatePower(state)))));
-  }
-  return rows
-    .filter((row): row is StatePower => row !== null)
-    .sort((a, b) => b.demandMetMw - a.demandMetMw);
-}
+// ~35 small POSTs, batched so MERIT never sees them all at once. Wrapped in
+// unstable_cache (5-min) so that even though the /grid page renders dynamically
+// now, this heavy query still hits MERIT at most once per window — not once per
+// request. Returns the last good result within the window if a later render
+// coincides with a MERIT blip.
+export const getStatewisePower = unstable_cache(
+  async (): Promise<StatePower[]> => {
+    const states = await getStateList();
+    if (!states.length) return [];
+    const rows: Array<StatePower | null> = [];
+    for (let i = 0; i < states.length; i += 8) {
+      rows.push(...(await Promise.all(states.slice(i, i + 8).map((state) => getStatePower(state)))));
+    }
+    return rows
+      .filter((row): row is StatePower => row !== null)
+      .sort((a, b) => b.demandMetMw - a.demandMetMw);
+  },
+  ["urja-statewise-power"],
+  { revalidate: 300 },
+);
