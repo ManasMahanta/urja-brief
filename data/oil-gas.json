@@ -1,0 +1,49 @@
+{
+  "asOf": "2026",
+  "source": "PPAC / Ministry of Petroleum & Natural Gas / operator disclosures — curated list of India's oil & gas infrastructure; capacities in MMTPA (million tonnes/year), coordinates approximate.",
+  "refineries": [
+    { "name": "Jamnagar SEZ (Reliance)", "operator": "Reliance", "mmtpa": 35.2, "lat": 22.34, "lng": 69.85 },
+    { "name": "Jamnagar DTA (Reliance)", "operator": "Reliance", "mmtpa": 33.0, "lat": 22.36, "lng": 69.87 },
+    { "name": "Vadinar (Nayara)", "operator": "Nayara Energy", "mmtpa": 20.0, "lat": 22.28, "lng": 69.71 },
+    { "name": "Koyali (IOCL)", "operator": "IOCL", "mmtpa": 13.7, "lat": 22.35, "lng": 73.15 },
+    { "name": "Paradip (IOCL)", "operator": "IOCL", "mmtpa": 15.0, "lat": 20.27, "lng": 86.61 },
+    { "name": "Panipat (IOCL)", "operator": "IOCL", "mmtpa": 15.0, "lat": 29.39, "lng": 76.97 },
+    { "name": "Mathura (IOCL)", "operator": "IOCL", "mmtpa": 8.0, "lat": 27.49, "lng": 77.68 },
+    { "name": "Barauni (IOCL)", "operator": "IOCL", "mmtpa": 6.0, "lat": 25.46, "lng": 85.97 },
+    { "name": "Haldia (IOCL)", "operator": "IOCL", "mmtpa": 8.0, "lat": 22.06, "lng": 88.11 },
+    { "name": "Guwahati (IOCL)", "operator": "IOCL", "mmtpa": 1.0, "lat": 26.18, "lng": 91.75 },
+    { "name": "Digboi (IOCL)", "operator": "IOCL", "mmtpa": 0.65, "lat": 27.39, "lng": 95.62 },
+    { "name": "Bongaigaon (IOCL)", "operator": "IOCL", "mmtpa": 2.7, "lat": 26.5, "lng": 90.55 },
+    { "name": "Visakhapatnam (HPCL)", "operator": "HPCL", "mmtpa": 15.0, "lat": 17.68, "lng": 83.2 },
+    { "name": "Mumbai (HPCL)", "operator": "HPCL", "mmtpa": 9.5, "lat": 19.0, "lng": 72.87 },
+    { "name": "Mumbai (BPCL)", "operator": "BPCL", "mmtpa": 12.0, "lat": 19.02, "lng": 72.89 },
+    { "name": "Kochi (BPCL)", "operator": "BPCL", "mmtpa": 15.5, "lat": 9.97, "lng": 76.28 },
+    { "name": "Bina (BORL/BPCL)", "operator": "BPCL", "mmtpa": 7.8, "lat": 24.18, "lng": 78.2 },
+    { "name": "Mangalore (MRPL)", "operator": "MRPL (ONGC)", "mmtpa": 15.0, "lat": 12.95, "lng": 74.8 },
+    { "name": "Manali / Chennai (CPCL)", "operator": "CPCL", "mmtpa": 10.5, "lat": 13.16, "lng": 80.26 },
+    { "name": "Cauvery Basin (CPCL)", "operator": "CPCL", "mmtpa": 1.0, "lat": 10.77, "lng": 79.84 },
+    { "name": "Bathinda (HMEL)", "operator": "HMEL", "mmtpa": 11.3, "lat": 30.21, "lng": 74.95 },
+    { "name": "Numaligarh (NRL)", "operator": "NRL", "mmtpa": 3.0, "lat": 26.62, "lng": 93.74 },
+    { "name": "Tatipaka (ONGC)", "operator": "ONGC", "mmtpa": 0.07, "lat": 16.6, "lng": 82.0 }
+  ],
+  "refineriesNote": "India's operating refineries total ~250 MMTPA — the world's fourth-largest refining hub. Reliance's Jamnagar complex (two refineries side by side) is the single largest site on earth. Digboi (1901) is Asia's oldest still-running refinery.",
+  "lngTerminals": [
+    { "name": "Dahej (Petronet)", "operator": "Petronet LNG", "mmtpa": 17.5, "lat": 21.7, "lng": 72.6 },
+    { "name": "Hazira (Shell)", "operator": "Shell", "mmtpa": 5.0, "lat": 21.1, "lng": 72.62 },
+    { "name": "Kochi (Petronet)", "operator": "Petronet LNG", "mmtpa": 5.0, "lat": 9.97, "lng": 76.27 },
+    { "name": "Dabhol (Konkan LNG)", "operator": "Konkan LNG", "mmtpa": 5.0, "lat": 17.6, "lng": 73.2 },
+    { "name": "Ennore (IOCL)", "operator": "IOCL", "mmtpa": 5.0, "lat": 13.24, "lng": 80.32 },
+    { "name": "Mundra (GSPC/Adani)", "operator": "GSPC / Adani", "mmtpa": 5.0, "lat": 22.74, "lng": 69.7 },
+    { "name": "Jaigarh (H-Energy, FSRU)", "operator": "H-Energy", "mmtpa": 4.0, "lat": 17.3, "lng": 73.2 }
+  ],
+  "lngNote": "Regasification terminals turn imported liquefied natural gas back into gas for the pipeline grid. India's LNG import capacity is heavily weighted to the west coast, near the gas-hungry Gujarat–Maharashtra belt.",
+  "fields": [
+    { "name": "Mumbai High", "operator": "ONGC", "kind": "Offshore crude", "lat": 19.5, "lng": 71.3, "note": "India's largest oil field — the offshore Arabian Sea giant that still anchors domestic production." },
+    { "name": "Krishna-Godavari (KG-D6)", "operator": "Reliance / ONGC", "kind": "Offshore gas", "lat": 16.0, "lng": 82.3, "note": "India's flagship deep-water gas basin off the Andhra coast." },
+    { "name": "Barmer / Mangala", "operator": "Cairn / Vedanta", "kind": "Onshore crude", "lat": 25.9, "lng": 71.3, "note": "India's largest onshore oil discovery, in the Rajasthan desert." },
+    { "name": "Upper Assam (Naharkatiya–Digboi)", "operator": "OIL / ONGC", "kind": "Onshore crude", "lat": 27.3, "lng": 95.4, "note": "Where Indian oil began — the northeast fields feeding Assam's refineries." },
+    { "name": "Cambay Basin", "operator": "ONGC", "kind": "Onshore crude & gas", "lat": 22.3, "lng": 72.6 },
+    { "name": "Cauvery Basin", "operator": "ONGC", "kind": "Onshore crude & gas", "lat": 11.0, "lng": 79.8 }
+  ],
+  "fieldsNote": "India produces only ~12% of the crude it uses, and this is where it comes from: the ageing offshore Mumbai High field, the KG deep-water gas basin, Rajasthan's onshore Barmer discovery, and the historic Assam fields."
+}

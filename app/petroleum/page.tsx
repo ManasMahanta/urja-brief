@@ -1,11 +1,92 @@
 import Link from "next/link";
 import FuelBreakdown from "@/components/urja/FuelBreakdown";
 import FuelBill from "@/components/urja/FuelBill";
+import InfraMapLoader from "@/components/urja/InfraMapLoader";
+import CoalDirectory from "@/components/coal/CoalDirectory";
 import petro from "@/data/petroleum.json";
+import oilGas from "@/data/oil-gas.json";
 
 export const revalidate = 86400;
 
 const lakhCrore = (crore: number) => (crore / 100000).toFixed(1);
+
+const refineriesByCap = [...oilGas.refineries].sort((a, b) => b.mmtpa - a.mmtpa);
+const totalRefiningMmtpa = Math.round(oilGas.refineries.reduce((s, r) => s + r.mmtpa, 0));
+
+function OilGasSection() {
+  const refineryLayer = {
+    id: "refineries",
+    label: `Refineries (${oilGas.refineries.length})`,
+    color: "#f59e0b",
+    sizeByMw: true,
+    sizeMax: 35,
+    unit: "MMTPA",
+    points: oilGas.refineries.map((r) => ({ name: r.name, lat: r.lat, lng: r.lng, mw: r.mmtpa, sub: `${r.operator} refinery` })),
+  };
+  const lngLayer = {
+    id: "lng",
+    label: `LNG terminals (${oilGas.lngTerminals.length})`,
+    color: "#22d3ee",
+    sizeByMw: true,
+    sizeMax: 18,
+    unit: "MMTPA",
+    points: oilGas.lngTerminals.map((t) => ({ name: t.name, lat: t.lat, lng: t.lng, mw: t.mmtpa, sub: `${t.operator} · LNG import terminal` })),
+  };
+  const fieldLayer = {
+    id: "fields",
+    label: `Producing fields (${oilGas.fields.length})`,
+    color: "#a3e635",
+    ring: true,
+    points: oilGas.fields.map((f) => ({ name: f.name, lat: f.lat, lng: f.lng, sub: `${f.kind} · ${f.operator}` })),
+  };
+
+  const dirRows = refineriesByCap.map((r) => ({ name: r.name, mw: r.mmtpa, owner: r.operator }));
+
+  return (
+    <>
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">India&apos;s oil &amp; gas map</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            {oilGas.refineries.length} refineries · ~{totalRefiningMmtpa} MMTPA
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          The physical petroleum system: refineries sized by capacity, the LNG import terminals where
+          gas lands, and the domestic fields the ~12% home-grown crude comes from. Tap a marker;
+          toggle a layer in the legend.
+        </p>
+        <div className="mt-4">
+          <InfraMapLoader layers={[refineryLayer, lngLayer, fieldLayer]} />
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">{oilGas.source}</p>
+      </section>
+
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">Every refinery, ranked</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            biggest: {refineriesByCap[0].name} · {refineriesByCap[0].mmtpa} MMTPA
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">{oilGas.refineriesNote}</p>
+        <div className="mt-4">
+          <CoalDirectory plants={dirRows} noun="refineries" unit="MMTPA" placeholder="Search a refinery or operator — e.g. Jamnagar, IOCL, Paradip" />
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <p className="rounded-xl border border-white/10 bg-slate-950/40 p-4 text-xs leading-relaxed text-slate-400">
+            <span className="font-mono text-[0.6rem] uppercase tracking-wide text-cyan-200/70">LNG terminals</span><br />
+            {oilGas.lngNote}
+          </p>
+          <p className="rounded-xl border border-white/10 bg-slate-950/40 p-4 text-xs leading-relaxed text-slate-400">
+            <span className="font-mono text-[0.6rem] uppercase tracking-wide text-lime-300/70">Producing fields</span><br />
+            {oilGas.fieldsNote}
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}
 
 export const metadata = {
   title: "Petroleum & Fuels",
@@ -130,6 +211,9 @@ export default function PetroleumPage() {
         <p className="mt-4 text-sm leading-relaxed text-slate-400">{petro.refining.why}</p>
         <p className="mt-2 text-xs leading-relaxed text-slate-500">{petro.refining.note}</p>
       </section>
+
+      {/* Oil & gas infrastructure map + refinery directory */}
+      <OilGasSection />
 
       {/* Strategic reserve — days of cover */}
       <section className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.05] p-5 sm:p-6">

@@ -8,10 +8,12 @@ export default function CoalDirectory({
   plants,
   placeholder = "Search plant or owner — e.g. Mundra, NTPC, Korba",
   noun = "plants",
+  unit = "MW",
 }: {
   plants: Plant[];
   placeholder?: string;
   noun?: string;
+  unit?: string;
 }) {
   const [q, setQ] = useState("");
   const [showAll, setShowAll] = useState(false);
@@ -57,7 +59,7 @@ export default function CoalDirectory({
               <tr key={`${p.name}-${i}`}>
                 <td className="py-2 pr-3 font-mono text-slate-500">{plants.indexOf(p) + 1}</td>
                 <td className="py-2 pr-3 font-medium text-slate-200">{p.name}</td>
-                <td className="py-2 pr-3 text-right font-mono text-amber-200">{p.mw.toLocaleString("en-IN")} MW</td>
+                <td className="py-2 pr-3 text-right font-mono text-amber-200">{p.mw.toLocaleString("en-IN")} {unit}</td>
                 <td className="py-2 text-slate-400">{p.owner || "—"}{p.year ? ` · ${p.year}` : ""}</td>
               </tr>
             ))}

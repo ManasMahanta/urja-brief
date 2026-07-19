@@ -40,6 +40,8 @@ export type InfraLayer = {
   color: string;
   ring?: boolean;
   sizeByMw?: boolean;
+  sizeMax?: number; // value that maps to the largest marker (defaults to 1000, i.e. MW-scaled)
+  unit?: string; // label shown after the capacity value in popups (defaults to "MW")
   points: InfraPoint[];
 };
 export type InfraMapProps = { layers: InfraLayer[] };
@@ -94,11 +96,12 @@ export default function InfraMap({ layers }: InfraMapProps) {
           for (let i = layers.length - 1; i >= 0; i--) {
             const layer = layers[i];
             map.addSource(layer.id, { type: "geojson", data: fc(layer.points) });
+            const sizeMax = layer.sizeMax ?? 1000;
             const radius = layer.sizeByMw
               ? [
                   "interpolate", ["linear"], ["zoom"],
-                  3, ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "mw"]], 5], 5, 2.5, 500, 6, 1000, 9],
-                  9, ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "mw"]], 5], 5, 4, 500, 14, 1000, 22],
+                  3, ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "mw"]], 0], 0, 2.5, sizeMax, 9],
+                  9, ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "mw"]], 0], 0, 4, sizeMax, 22],
                 ]
               : ["interpolate", ["linear"], ["zoom"], 3, 4, 8, 7, 13, 10];
             map.addLayer({
@@ -118,7 +121,7 @@ export default function InfraMap({ layers }: InfraMapProps) {
               if (!f) return;
               const [lng, lat] = (f.geometry as any).coordinates;
               const p = f.properties as any;
-              const mwLine = p.mw !== "" && p.mw != null ? `<br/><span style="color:#b45309;font-weight:600">${Number(p.mw).toLocaleString("en-IN")} MW</span>` : "";
+              const mwLine = p.mw !== "" && p.mw != null ? `<br/><span style="color:#b45309;font-weight:600">${Number(p.mw).toLocaleString("en-IN")} ${layer.unit ?? "MW"}</span>` : "";
               const subLine = p.sub ? `<br/><span style="color:#475569">${p.sub}</span>` : "";
               popup
                 .setLngLat([lng, lat])
