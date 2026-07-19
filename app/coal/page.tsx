@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import ExplainButton from "@/components/urja/ExplainButton";
 import { getCoalStock } from "@/lib/coal";
+import { getGridSnapshot } from "@/lib/grid-live";
+import coalData from "@/data/coal.json";
 
 export const revalidate = 21600;
 // Cold-cache renders fetch and parse the CEA PDF; give them room.
@@ -100,6 +102,50 @@ async function CoalDesk() {
   );
 }
 
+// Coal's live grip on the grid — thermal (overwhelmingly coal) as a share of
+// what's being generated this instant. The number the desk keeps implying.
+async function CoalLiveGrip() {
+  let snap = null;
+  try {
+    snap = await getGridSnapshot();
+  } catch {
+    snap = null;
+  }
+  if (!snap || snap.totalGenerationMw <= 0) return null;
+  const thermalMw = snap.mix.thermal;
+  const sharePct = (thermalMw / snap.totalGenerationMw) * 100;
+  return (
+    <section className="urja-panel p-5 sm:p-6">
+      <p className="urja-kicker">Coal&apos;s grip on the grid, right now</p>
+      <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4">
+        <div>
+          <p className="text-sm text-slate-400">Power being generated from thermal (overwhelmingly coal)</p>
+          <p className="mt-1 font-mono text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+            {sharePct.toFixed(0)}
+            <span className="ml-2 text-lg font-normal text-slate-400">%</span>
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-slate-400">In gigawatts</p>
+          <p className="mt-1 font-mono text-4xl font-semibold text-amber-200">{(thermalMw / 1000).toFixed(1)}<span className="ml-1 text-base font-normal text-slate-400">GW</span></p>
+        </div>
+      </div>
+      <div className="mt-5 h-3 w-full overflow-hidden rounded-full bg-slate-950/60" aria-hidden="true">
+        <span className="block h-full rounded-full bg-amber-400/70" style={{ width: `${Math.min(100, sharePct)}%` }} />
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-slate-400">
+        Of the {(snap.totalGenerationMw / 1000).toFixed(0)} GW India is generating this moment, about{" "}
+        {(thermalMw / 1000).toFixed(0)} GW is coming from thermal plants. That is why a few days&apos;
+        swing in the coal stock above is a national-grid story, not a mining footnote.
+      </p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">
+        Live from the Ministry of Power&apos;s MERIT dashboard, which reports coal and lignite together
+        as &ldquo;thermal&rdquo; (gas is counted separately). Instantaneous MW at fetch time.
+      </p>
+    </section>
+  );
+}
+
 export default function CoalPage() {
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -123,6 +169,87 @@ export default function CoalPage() {
       >
         <CoalDesk />
       </Suspense>
+
+      <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl border border-cyan-100/10 bg-[#05070d]" />}>
+        <CoalLiveGrip />
+      </Suspense>
+
+      {/* Production & self-reliance — the supply side */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">Where the fuel comes from</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Mined at home a year</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{(coalData.production.annualProductionMt / 1000).toFixed(2)}<span className="ml-1 text-sm font-normal text-slate-400">bn t</span></p>
+            <p className="mt-1 text-xs text-slate-500">{coalData.production.annualProductionMt.toLocaleString("en-IN")} MT · record high</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Dug by Coal India</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">~{coalData.production.coalIndiaSharePct}%</p>
+            <p className="mt-1 text-xs text-slate-500">rest from captive &amp; commercial mines</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Reserve rank</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">#{coalData.imports.reserveRank}</p>
+            <p className="mt-1 text-xs text-slate-500">largest coal reserves in the world</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">{coalData.production.why}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-500">{coalData.production.note}</p>
+      </section>
+
+      {/* The import paradox */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">Why a coal-rich country still imports</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-4">
+            <p className="text-xs text-slate-400">Coal imported a year</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">~{coalData.imports.annualImportMt}<span className="ml-1 text-sm font-normal text-slate-400">MT</span></p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Of it, coking coal (for steel)</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">~{coalData.imports.cokingCoalImportMt}<span className="ml-1 text-sm font-normal text-slate-400">MT</span></p>
+            <p className="mt-1 text-xs text-slate-500">the grade India barely has</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Import bill</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">~${coalData.imports.importBillUsdBn}<span className="ml-1 text-sm font-normal text-slate-400">bn</span></p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">{coalData.imports.why}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-500">{coalData.imports.note}</p>
+      </section>
+
+      {/* Coal vs the transition — the honest tension */}
+      <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-amber-200">Coal vs the transition</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Coal in generation</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-amber-200">~{coalData.transition.coalGenSharePct}%</p>
+            <p className="mt-1 text-xs text-slate-500">share slowly falling</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Coal capacity today</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">~{coalData.transition.coalCapacityGw}<span className="ml-1 text-sm font-normal text-slate-400">GW</span></p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">More coal being added</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">+{coalData.transition.plannedAddGw}<span className="ml-1 text-sm font-normal text-slate-400">GW</span></p>
+            <p className="mt-1 text-xs text-slate-500">this decade</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Non-fossil target</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-emerald-300">{coalData.transition.nonFossilTargetGw}<span className="ml-1 text-sm font-normal text-slate-400">GW</span></p>
+            <p className="mt-1 text-xs text-slate-500">by 2030</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-amber-100/85">{coalData.transition.why}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">{coalData.transition.note}</p>
+        <Link href="/renewables" className="mt-3 inline-block text-sm font-semibold text-cyan-300 hover:text-white">
+          See what&apos;s winning the percentage on the renewables desk →
+        </Link>
+      </section>
 
       <section className="grid gap-4 md:grid-cols-3">
         {[

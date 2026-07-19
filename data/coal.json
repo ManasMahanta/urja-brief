@@ -1,0 +1,26 @@
+{
+  "asOf": "2026",
+  "source": "Coal India / Ministry of Coal / CEA — approximate, dated reference (no clean free live feed for production, imports or capacity)",
+  "production": {
+    "annualProductionMt": 1047,
+    "coalIndiaSharePct": 75,
+    "note": "India now mines over a billion tonnes of coal a year — an all-time high — with Coal India digging roughly three-quarters of it and captive/commercial mines the rest. Record output is the supply side of the same story the daily stock figure watches.",
+    "why": "Rising domestic output is a deliberate import-substitution push: the more India mines at home, the less thermal coal it has to buy abroad and the less the grid is exposed to global coal prices."
+  },
+  "imports": {
+    "annualImportMt": 250,
+    "cokingCoalImportMt": 57,
+    "importBillUsdBn": 38,
+    "reserveRank": 5,
+    "note": "India holds the world's fifth-largest coal reserves yet still imports around 250 million tonnes a year. Two reasons: it has very little coking coal — the grade steelmaking needs — and several coastal power plants were built to run on imported coal.",
+    "why": "The paradox is grade and geography, not scarcity. Thermal-coal imports are being squeezed by record domestic output, but coking-coal imports for steel are structural and won't fall until India finds more of it or steel switches process."
+  },
+  "transition": {
+    "coalGenSharePct": 74,
+    "coalCapacityGw": 218,
+    "plannedAddGw": 90,
+    "nonFossilTargetGw": 500,
+    "note": "Coal's share of generation is edging down as renewables scale, but in absolute terms coal is still growing — India is adding around 90 GW of new coal capacity this decade even while targeting 500 GW of non-fossil capacity by 2030.",
+    "why": "Both things are true at once, and honest energy coverage has to hold them together: renewables are winning the percentage, coal is still winning the tonnage. Coal keeps growing because it supplies firm power at night and through demand peaks that solar can't yet cover — which is exactly what the grid and storage desks track."
+  }
+}
