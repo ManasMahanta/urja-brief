@@ -7,6 +7,10 @@ import { getEstimatedReSplit } from "@/lib/renewables";
 import { getReOutlook, type Strength } from "@/lib/renewables";
 import { getSolarYields } from "@/lib/solar";
 import capacity from "@/data/re-capacity.json";
+import InfraMapLoader from "@/components/urja/InfraMapLoader";
+import CoalDirectory from "@/components/coal/CoalDirectory";
+import solarParks from "@/data/solar-parks.json";
+import windFarms from "@/data/wind-farms.json";
 
 export const revalidate = 3600;
 export const maxDuration = 30;
@@ -229,6 +233,95 @@ function CapacityReality() {
   );
 }
 
+const solarDirRows = solarParks.parks.map((p) => ({
+  name: p.name ?? "Unnamed solar park",
+  mw: p.mw,
+  owner: p.operator,
+}));
+
+function InstallationsSection() {
+  const solarLayer = {
+    id: "solar",
+    label: `Solar parks (${solarParks.count})`,
+    color: "#f59e0b",
+    sizeByMw: true,
+    points: solarParks.parks.map((p) => ({
+      name: p.name ?? "Unnamed solar park",
+      lat: p.lat,
+      lng: p.lng,
+      mw: p.mw,
+      sub: p.operator ?? "Solar park",
+    })),
+  };
+  const windLayer = {
+    id: "wind",
+    label: `Wind farms (${windFarms.count})`,
+    color: "#38bdf8",
+    sizeByMw: true,
+    points: windFarms.farms.map((f) => ({ name: f.name, lat: f.lat, lng: f.lng, mw: f.mw, sub: "Wind farm" })),
+  };
+
+  return (
+    <>
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">Where the parks actually are</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            {solarParks.count} solar parks · {solarParks.totalGw} GW mapped
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          Every utility-scale solar park we can place, sized by capacity, with the handful of wind
+          farms that are mapped as farms. Tap a marker for detail; toggle a layer in the legend.
+        </p>
+        <div className="mt-4">
+          <InfraMapLoader layers={[solarLayer, windLayer]} />
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+          Solar: {solarParks.source} Wind: {windFarms.source}
+        </p>
+      </section>
+
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">India&apos;s biggest solar parks, ranked</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            biggest: {solarParks.parks[0].name} · {solarParks.parks[0].mw.toLocaleString("en-IN")} MW
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          {solarParks.count} mapped parks totalling {solarParks.totalGw} GW. That is far short of
+          India&apos;s ~{Math.round(capacity.nationalMw.solar / 1000)} GW of solar — most of the rest is
+          rooftop and smaller plants that aren&apos;t individually mapped. Search a park or operator.
+        </p>
+        <div className="mt-4">
+          <CoalDirectory
+            plants={solarDirRows}
+            noun="parks"
+            placeholder="Search a solar park or operator — e.g. Khavda, Pavagada, NTPC"
+          />
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-sky-400/20 bg-sky-400/[0.06] p-5 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-sky-200">Why wind isn&apos;t a map</p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-200">
+          India has about {(capacity.nationalMw.wind / 1000).toFixed(0)} GW of wind, but almost none of it
+          maps as tidy &ldquo;farms&rdquo;: open data records wind as tens of thousands of individual
+          turbines strung along ridgelines and coasts, not as named parks. Only a couple — led by{" "}
+          <span className="font-semibold text-sky-200">Muppandal</span> in Tamil Nadu, one of Asia&apos;s
+          largest wind clusters — are mapped as a single farm.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+          So the honest way to see India&apos;s wind is by state, not by dot — Gujarat, Tamil Nadu,
+          Karnataka, Rajasthan and Maharashtra hold most of it. That ranking is in{" "}
+          <span className="text-slate-200">Who&apos;s building the transition</span> above.
+        </p>
+      </section>
+    </>
+  );
+}
+
 export default function RenewablesPage() {
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -256,6 +349,7 @@ export default function RenewablesPage() {
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><YieldRanking /></Suspense>
       <TargetTracker />
       <LeadersSection />
+      <InstallationsSection />
       <CapacityReality />
 
       <Link className="text-sm font-semibold text-cyan-300 hover:text-white" href="/carbon">

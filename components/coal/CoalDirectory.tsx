@@ -4,7 +4,15 @@ import { useMemo, useState } from "react";
 
 type Plant = { name: string; mw: number; owner?: string | null; year?: number | null };
 
-export default function CoalDirectory({ plants }: { plants: Plant[] }) {
+export default function CoalDirectory({
+  plants,
+  placeholder = "Search plant or owner — e.g. Mundra, NTPC, Korba",
+  noun = "plants",
+}: {
+  plants: Plant[];
+  placeholder?: string;
+  noun?: string;
+}) {
   const [q, setQ] = useState("");
   const [showAll, setShowAll] = useState(false);
 
@@ -26,11 +34,11 @@ export default function CoalDirectory({ plants }: { plants: Plant[] }) {
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search plant or owner — e.g. Mundra, NTPC, Korba"
+          placeholder={placeholder}
           className="w-full max-w-sm rounded-lg border border-cyan-100/15 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-cyan-300/50"
         />
         <span className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
-          {q ? `${filtered.length} match${filtered.length === 1 ? "" : "es"}` : `${plants.length} plants`}
+          {q ? `${filtered.length} match${filtered.length === 1 ? "" : "es"}` : `${plants.length} ${noun}`}
         </span>
       </div>
 
@@ -67,7 +75,7 @@ export default function CoalDirectory({ plants }: { plants: Plant[] }) {
           onClick={() => setShowAll(true)}
           className="mt-4 text-sm font-semibold text-cyan-300 hover:text-white"
         >
-          Show all {plants.length} plants →
+          Show all {plants.length} {noun} →
         </button>
       )}
     </div>
