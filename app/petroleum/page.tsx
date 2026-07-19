@@ -5,7 +5,7 @@ import InfraMapLoader from "@/components/urja/InfraMapLoader";
 import CoalDirectory from "@/components/coal/CoalDirectory";
 import petro from "@/data/petroleum.json";
 import oilGas from "@/data/oil-gas.json";
-import { getPpacFuelPrices } from "@/lib/ppac";
+import { getPpacFuelPrices, getPpacCrude } from "@/lib/ppac";
 
 export const revalidate = 43200;
 export const maxDuration = 30;
@@ -100,8 +100,9 @@ export default async function PetroleumPage() {
   const daysSinceRevision = Math.floor(
     (Date.now() - new Date(petro.lastPriceRevisionDate + "T00:00:00+05:30").getTime()) / 86_400_000,
   );
-  const ppac = await getPpacFuelPrices();
+  const [ppac, crude] = await Promise.all([getPpacFuelPrices(), getPpacCrude()]);
   const live = ppac ? { postedOn: ppac.postedOn, metros: ppac.metros } : undefined;
+  const crudeUsd = crude?.usdPerBbl ?? petro.crude.indianBasketUsdPerBbl;
 
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -183,8 +184,25 @@ export default async function PetroleumPage() {
         <p className="urja-kicker">Crude oil &amp; India&apos;s import dependence</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
-            <p className="text-xs text-slate-400">Indian Basket crude</p>
-            <p className="mt-1 font-mono text-3xl font-semibold text-white">${petro.crude.indianBasketUsdPerBbl}<span className="ml-1 text-sm font-normal text-slate-400">/bbl</span></p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-slate-400">Indian Basket crude</p>
+              {crude ? (
+                <span className="rounded-full border border-emerald-300/25 bg-emerald-300/[0.07] px-1.5 py-0.5 font-mono text-[0.55rem] uppercase tracking-wide text-emerald-300">
+                  PPAC · {crude.month.slice(0, 3)}
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">${crudeUsd}<span className="ml-1 text-sm font-normal text-slate-400">/bbl</span></p>
+            {crude && crude.series.length > 1 ? (
+              <div className="mt-2 flex items-end gap-1.5 text-[0.6rem] text-slate-500">
+                {crude.series.slice(-6).map((p) => (
+                  <span key={p.month} className="flex flex-col items-center">
+                    <span className="font-mono text-slate-300">{p.usdPerBbl}</span>
+                    <span>{p.month.slice(0, 3)}</span>
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-4">
             <p className="text-xs text-slate-400">Crude that&apos;s imported</p>
@@ -197,7 +215,10 @@ export default async function PetroleumPage() {
         </div>
         <p className="mt-4 text-sm leading-relaxed text-slate-400">
           India imports about {petro.importDependencePct}% of the crude it refines, so the pump price
-          and a bill worth tens of billions of dollars ride on global oil and the rupee. {petro.crude.note}
+          and a bill worth tens of billions of dollars ride on global oil and the rupee.{" "}
+          {crude
+            ? `The Indian Basket is the crude mix India actually buys (sour Oman/Dubai + Brent); PPAC prices it, and $${crude.usdPerBbl}/bbl is its ${crude.month} ${crude.fy.split("-")[0]} monthly average.`
+            : petro.crude.note}
         </p>
       </section>
 
