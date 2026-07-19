@@ -5,8 +5,10 @@ import InfraMapLoader from "@/components/urja/InfraMapLoader";
 import CoalDirectory from "@/components/coal/CoalDirectory";
 import petro from "@/data/petroleum.json";
 import oilGas from "@/data/oil-gas.json";
+import { getPpacFuelPrices } from "@/lib/ppac";
 
-export const revalidate = 86400;
+export const revalidate = 43200;
+export const maxDuration = 30;
 
 const lakhCrore = (crore: number) => (crore / 100000).toFixed(1);
 
@@ -94,10 +96,12 @@ export const metadata = {
     "India's transport-fuel picture: where your ₹100 of petrol actually goes (more than half is tax), crude oil and India's ~88% import dependence, the rise-fast-fall-slow reality of pump prices, and LPG cooking-fuel costs.",
 };
 
-export default function PetroleumPage() {
+export default async function PetroleumPage() {
   const daysSinceRevision = Math.floor(
     (Date.now() - new Date(petro.lastPriceRevisionDate + "T00:00:00+05:30").getTime()) / 86_400_000,
   );
+  const ppac = await getPpacFuelPrices();
+  const live = ppac ? { postedOn: ppac.postedOn, metros: ppac.metros } : undefined;
 
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -116,11 +120,51 @@ export default function PetroleumPage() {
         </div>
       </section>
 
+      {/* Live official metro prices from PPAC */}
+      {ppac && (
+        <section className="urja-panel p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="urja-kicker">Official pump prices today</p>
+            <a
+              href={ppac.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/[0.07] px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-wide text-emerald-300 hover:text-white"
+            >
+              PPAC · as on {ppac.postedOn} ↗
+            </a>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {(Object.keys(ppac.metros) as Array<keyof typeof ppac.metros>).map((city) => (
+              <div key={city} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+                <p className="text-xs text-slate-400">{city}</p>
+                <div className="mt-2 flex items-end justify-between">
+                  <div>
+                    <p className="font-mono text-[0.6rem] uppercase tracking-wide text-amber-200/70">Petrol</p>
+                    <p className="font-mono text-2xl font-semibold text-white">₹{ppac.metros[city].petrol.toFixed(2)}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-mono text-[0.6rem] uppercase tracking-wide text-cyan-200/70">Diesel</p>
+                    <p className="font-mono text-2xl font-semibold text-white">₹{ppac.metros[city].diesel.toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
+            Retail selling price per litre, parsed live from the Petroleum Planning &amp; Analysis
+            Cell&apos;s daily metro price sheet — the government&apos;s own source. PPAC publishes the four
+            metros; the calculators below use these live where they overlap and reference prices for
+            other cities.
+          </p>
+        </section>
+      )}
+
       {/* #1 — the transparency breakdown */}
-      <FuelBreakdown />
+      <FuelBreakdown live={live} />
 
       {/* Personal bill + cheapest→costliest state ranking */}
-      <FuelBill />
+      <FuelBill live={live} />
 
       {/* Tax revenue — the aggregate of every litre's tax */}
       <section className="rounded-2xl border border-rose-400/20 bg-rose-400/[0.05] p-5 sm:p-6">

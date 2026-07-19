@@ -26,18 +26,22 @@ const SEGMENTS: Array<{ key: "base" | "dealer" | "excise" | "vat"; label: string
   { key: "vat", label: "State VAT", bar: "bg-rose-400/80", tax: true },
 ];
 
-export default function FuelBreakdown() {
+type Live = { postedOn: string; metros: Record<string, { petrol: number; diesel: number }> };
+
+export default function FuelBreakdown({ live }: { live?: Live }) {
   const [city, setCity] = useState("Delhi");
   const [kind, setKind] = useState<Fuel>("petrol");
 
+  const liveHere = live?.metros[city]?.[kind];
+
   const data = useMemo(() => {
-    const retail = (fuel.cities as Record<string, { petrol: number; diesel: number }>)[city][kind];
+    const retail = live?.metros[city]?.[kind] ?? (fuel.cities as Record<string, { petrol: number; diesel: number }>)[city][kind];
     const c = CONST[kind];
     const vat = Math.max(0, retail - c.base - c.excise - c.dealer);
     const parts = { base: c.base, dealer: c.dealer, excise: c.excise, vat };
     const tax = c.excise + vat;
     return { retail, parts, tax, taxPct: (tax / retail) * 100 };
-  }, [city, kind]);
+  }, [city, kind, live]);
 
   return (
     <section className="urja-panel p-5 sm:p-6">
@@ -72,6 +76,11 @@ export default function FuelBreakdown() {
       <p className="mt-5 text-sm text-slate-300">
         A litre of {kind} in {city} costs <span className="font-mono text-white">{inr(data.retail)}</span> — of which{" "}
         <span className="font-mono font-semibold text-rose-300">{inr(data.tax)} ({data.taxPct.toFixed(0)}%) is tax</span>.
+        {liveHere && live ? (
+          <span className="ml-2 rounded-full border border-emerald-300/25 bg-emerald-300/[0.07] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wide text-emerald-300">
+            PPAC official · {live.postedOn}
+          </span>
+        ) : null}
       </p>
 
       <div className="mt-4 flex h-4 w-full overflow-hidden rounded-full bg-slate-950/60" aria-hidden="true">

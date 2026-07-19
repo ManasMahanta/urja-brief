@@ -20,36 +20,38 @@ const cityRows = fuel.cities as Record<string, Row>;
 const cities = Object.keys(cityRows);
 const inr = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
-const taxPerLitre = (city: string, kind: Fuel) => {
+type Live = { postedOn: string; metros: Record<string, { petrol: number; diesel: number }> };
+
+const taxPerLitre = (city: string, kind: Fuel, live?: Live) => {
   const c = CONST[kind];
-  const retail = cityRows[city][kind];
+  const retail = live?.metros[city]?.[kind] ?? cityRows[city][kind];
   const vat = Math.max(0, retail - c.base - c.excise - c.dealer);
   return { retail, tax: c.excise + vat, vat };
 };
 
-export default function FuelBill() {
+export default function FuelBill({ live }: { live?: Live }) {
   const [city, setCity] = useState("Delhi");
   const [kind, setKind] = useState<Fuel>("petrol");
   const [km, setKm] = useState(1000);
   const [mileage, setMileage] = useState(15);
 
   const bill = useMemo(() => {
-    const { retail, tax } = taxPerLitre(city, kind);
+    const { retail, tax } = taxPerLitre(city, kind, live);
     const litres = mileage > 0 ? km / mileage : 0;
     const monthly = litres * retail;
     const taxPart = litres * tax;
     return { litres, monthly, taxPart, yearTax: taxPart * 12, taxPct: retail > 0 ? (tax / retail) * 100 : 0 };
-  }, [city, kind, km, mileage]);
+  }, [city, kind, km, mileage, live]);
 
   // Cheapest → costliest state for a full tank, ranked by pump price for the
   // selected fuel. The spread is almost entirely state VAT.
   const ranking = useMemo(() => {
-    const rows = cities.map((c) => ({ city: c, ...taxPerLitre(c, kind) }));
+    const rows = cities.map((c) => ({ city: c, ...taxPerLitre(c, kind, live) }));
     rows.sort((a, b) => a.retail - b.retail);
     const min = rows[0].retail;
     const max = rows[rows.length - 1].retail;
     return { rows, min, max, spread: max - min };
-  }, [kind]);
+  }, [kind, live]);
 
   return (
     <section className="urja-panel p-5 sm:p-6">
