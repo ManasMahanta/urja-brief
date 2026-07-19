@@ -1,5 +1,6 @@
 import Link from "next/link";
 import FuelBreakdown from "@/components/urja/FuelBreakdown";
+import FuelBill from "@/components/urja/FuelBill";
 import petro from "@/data/petroleum.json";
 
 export const revalidate = 86400;
@@ -37,6 +38,9 @@ export default function PetroleumPage() {
       {/* #1 — the transparency breakdown */}
       <FuelBreakdown />
 
+      {/* Personal bill + cheapest→costliest state ranking */}
+      <FuelBill />
+
       {/* Tax revenue — the aggregate of every litre's tax */}
       <section className="rounded-2xl border border-rose-400/20 bg-rose-400/[0.05] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-rose-200">What the tax adds up to</p>
@@ -69,6 +73,87 @@ export default function PetroleumPage() {
         <p className="mt-4 text-sm leading-relaxed text-slate-400">
           India imports about {petro.importDependencePct}% of the crude it refines, so the pump price
           and a bill worth tens of billions of dollars ride on global oil and the rupee. {petro.crude.note}
+        </p>
+      </section>
+
+      {/* Import-source mix — the Russia story */}
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">Who India buys crude from</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            Russia was {petro.importSources.russiaPreWarPct}% before 2022
+          </p>
+        </div>
+        <div className="mt-4 flex flex-col gap-2">
+          {petro.importSources.sources.map((s) => (
+            <div key={s.country} className="flex items-center gap-3 text-sm">
+              <span className="w-28 shrink-0 truncate text-slate-300">{s.country}</span>
+              <span className="relative h-5 flex-1 overflow-hidden rounded bg-slate-950/60">
+                <span
+                  className={`absolute inset-y-0 left-0 rounded ${s.accent === "rose" ? "bg-rose-400/70" : "bg-cyan-400/50"}`}
+                  style={{ width: `${s.sharePct}%` }}
+                />
+              </span>
+              <span className={`w-12 shrink-0 text-right font-mono ${s.accent === "rose" ? "text-rose-300" : "text-slate-100"}`}>
+                {s.sharePct}%
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">
+          {petro.importSources.why} At roughly ${petro.importSources.discountUsdPerBbl}/barrel below the
+          market, discounted Russian crude reshaped India&apos;s oil map.
+        </p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-500">{petro.importSources.note}</p>
+      </section>
+
+      {/* India the refiner & exporter — the untold half */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">India imports crude, exports fuel</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Refining capacity</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{petro.refining.capacityMmtpa}<span className="ml-1 text-sm font-normal text-slate-400">MMT/yr</span></p>
+            <p className="mt-1 text-xs text-slate-500">≈ {petro.refining.capacityMbpd} million barrels/day</p>
+          </div>
+          <div className="rounded-xl border border-emerald-300/20 bg-emerald-300/[0.05] p-4">
+            <p className="text-xs text-slate-400">Refined-product exports</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-emerald-300">${petro.refining.refinedExportUsdBn}<span className="ml-1 text-sm font-normal text-slate-400">bn/yr</span></p>
+            <p className="mt-1 text-xs text-slate-500">a top single export line</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Jamnagar (Reliance)</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{petro.refining.jamnagarMbpd}<span className="ml-1 text-sm font-normal text-slate-400">mbpd</span></p>
+            <p className="mt-1 text-xs text-slate-500">world&apos;s largest single site</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">{petro.refining.why}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-500">{petro.refining.note}</p>
+      </section>
+
+      {/* Strategic reserve — days of cover */}
+      <section className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.05] p-5 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-cyan-200">If imports stopped tomorrow</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Strategic reserve</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">{petro.strategicReserve.strategicDays}<span className="ml-1 text-sm font-normal text-slate-400">days</span></p>
+            <p className="mt-1 text-xs text-slate-500">{petro.strategicReserve.strategicMmt} MMT in caverns</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Total cover with commercial stock</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">≈{petro.strategicReserve.totalCoverDays}<span className="ml-1 text-sm font-normal text-slate-400">days</span></p>
+            <p className="mt-1 text-xs text-slate-500">crude + refined products held</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Crude that&apos;s imported</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">{petro.importDependencePct}%</p>
+            <p className="mt-1 text-xs text-slate-500">why the buffer matters</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-cyan-100/80">{petro.strategicReserve.why}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">
+          Caverns at {petro.strategicReserve.sites}. {petro.strategicReserve.note}
         </p>
       </section>
 

@@ -29,5 +29,35 @@
     "stateVatCrore": 320000,
     "totalCrore": 650000,
     "note": "Approximate annual government revenue from petroleum taxes — central excise plus state VAT. One of the largest single revenue lines for both the Centre and the states."
+  },
+  "importSources": {
+    "sources": [
+      { "country": "Russia", "sharePct": 36, "accent": "rose" },
+      { "country": "Iraq", "sharePct": 20, "accent": "slate" },
+      { "country": "Saudi Arabia", "sharePct": 13, "accent": "slate" },
+      { "country": "UAE", "sharePct": 9, "accent": "slate" },
+      { "country": "United States", "sharePct": 5, "accent": "slate" },
+      { "country": "Others", "sharePct": 17, "accent": "slate" }
+    ],
+    "russiaPreWarPct": 2,
+    "discountUsdPerBbl": 4,
+    "note": "Before the 2022 Ukraine war Russia was barely 2% of India's crude; discounted Russian barrels then became India's single largest source. Shares shift month to month — this is a recent reference mix, not a live feed.",
+    "why": "Buying discounted Russian crude cut India's import bill by billions of dollars a year and reshaped who India buys oil from — the biggest change in the country's oil map in decades."
+  },
+  "refining": {
+    "capacityMmtpa": 257,
+    "capacityMbpd": 5.2,
+    "jamnagarMbpd": 1.24,
+    "refinedExportUsdBn": 80,
+    "note": "India refines far more than it consumes and exports the surplus as diesel, petrol and jet fuel — refined petroleum products are among the country's largest single export earners. Reliance's Jamnagar complex is the world's largest single-site refinery.",
+    "why": "India imports crude but exports fuel: it buys cheap crude, refines it at scale, and sells the finished product abroad at a margin. That refining muscle is why the import bill and the export ledger both run on oil."
+  },
+  "strategicReserve": {
+    "strategicMmt": 5.33,
+    "strategicDays": 9.5,
+    "totalCoverDays": 74,
+    "sites": "Visakhapatnam, Mangaluru and Padur",
+    "note": "India's dedicated Strategic Petroleum Reserve holds about 5.33 million tonnes of crude — roughly 9–10 days of imports — in underground caverns. Counting the crude and product that refiners and OMCs hold commercially, total cover is around 74 days. India is expanding Phase-II caverns to deepen this buffer.",
+    "why": "With 88% of crude imported, days of cover is national-security arithmetic: it is how long the country could keep refineries running if imports were suddenly cut off."
   }
 }
