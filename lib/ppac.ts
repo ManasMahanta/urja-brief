@@ -118,3 +118,87 @@ export const getPpacCrude = unstable_cache(fetchPpacCrude, ["urja-ppac-crude"], 
   revalidate: 43_200,
   tags: ["urja-ppac"],
 });
+
+// India's crude balance — import bill and import dependence — from the same
+// AjaxController JSON feeds (import-export, indigenous production, crude
+// processing). Values are per financial year; some cells wrap the number in an
+// <b> tag, so strip tags before parsing. Uses the last COMPLETE FY for a stable
+// annual figure. Dependence = 1 − indigenous crude ÷ crude processed.
+export type PpacCrudeBalance = {
+  fy: string; // e.g. "2025-2026"
+  importBillUsdBn: number;
+  importDependencePct: number;
+  indigenousMmt: number;
+  processedMmt: number;
+};
+
+// The most recent financial year that has fully ended (India FY = Apr–Mar).
+function lastCompleteIndianFy(): string {
+  const [start] = currentIndianFy().split("-").map(Number);
+  return `${start - 1}-${start}`;
+}
+
+const stripTags = (v: unknown): string => String(v ?? "").replace(/<[^>]+>/g, "").trim();
+const stripNum = (v: unknown): number => Number(stripTags(v).replace(/,/g, ""));
+
+async function ppacPost(method: string, fy: string, reportBy: number, pageId: number) {
+  const res = await fetch(`https://ppac.gov.in/AjaxController/${method}`, {
+    method: "POST",
+    headers: {
+      "User-Agent": UA,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: `financialYear=${encodeURIComponent(fy)}&reportBy=${reportBy}&pageId=${pageId}`,
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!res.ok) throw new Error(`ppac ${method} ${res.status}`);
+  const json = (await res.json()) as { result?: unknown };
+  const r = json.result;
+  return (Array.isArray(r) ? r : r && typeof r === "object" ? Object.values(r) : []) as Array<
+    Record<string, unknown>
+  >;
+}
+
+async function fetchPpacCrudeBalance(): Promise<PpacCrudeBalance | null> {
+  try {
+    const fy = lastCompleteIndianFy();
+    const [imp, prod, proc] = await Promise.all([
+      ppacPost("getImportExports", fy, 3, 14), // crude import value, $ million
+      ppacPost("getProductionJson", fy, 1, 3), // indigenous crude, MMT (monthly rows)
+      ppacPost("getCrudeProcessingData", fy, 1, 41), // crude processed, '000 MT
+    ]);
+
+    const crudeRow = imp.find((r) => /^crude oil$/i.test(stripTags(r.title)));
+    const importUsdM = crudeRow ? stripNum(crudeRow.total) : NaN;
+
+    const indigenousMmt = prod.reduce((s, r) => s + (stripNum(r.total) || 0), 0);
+
+    const grand = proc.find((r) => /grand\s*total/i.test(stripTags(r.title)));
+    const processedMmt = grand ? stripNum(grand.total) / 1000 : NaN; // '000 MT → MMT
+
+    if (
+      !Number.isFinite(importUsdM) || importUsdM <= 0 ||
+      !Number.isFinite(indigenousMmt) || indigenousMmt <= 0 ||
+      !Number.isFinite(processedMmt) || processedMmt <= 0 ||
+      indigenousMmt >= processedMmt
+    ) {
+      return null;
+    }
+
+    return {
+      fy,
+      importBillUsdBn: Math.round(importUsdM / 1000),
+      importDependencePct: Math.round((1 - indigenousMmt / processedMmt) * 100),
+      indigenousMmt: Math.round(indigenousMmt * 10) / 10,
+      processedMmt: Math.round(processedMmt),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export const getPpacCrudeBalance = unstable_cache(fetchPpacCrudeBalance, ["urja-ppac-crude-balance"], {
+  revalidate: 86_400,
+  tags: ["urja-ppac"],
+});

@@ -5,7 +5,7 @@ import InfraMapLoader from "@/components/urja/InfraMapLoader";
 import CoalDirectory from "@/components/coal/CoalDirectory";
 import petro from "@/data/petroleum.json";
 import oilGas from "@/data/oil-gas.json";
-import { getPpacFuelPrices, getPpacCrude } from "@/lib/ppac";
+import { getPpacFuelPrices, getPpacCrude, getPpacCrudeBalance } from "@/lib/ppac";
 
 export const revalidate = 43200;
 export const maxDuration = 30;
@@ -100,9 +100,16 @@ export default async function PetroleumPage() {
   const daysSinceRevision = Math.floor(
     (Date.now() - new Date(petro.lastPriceRevisionDate + "T00:00:00+05:30").getTime()) / 86_400_000,
   );
-  const [ppac, crude] = await Promise.all([getPpacFuelPrices(), getPpacCrude()]);
+  const [ppac, crude, balance] = await Promise.all([
+    getPpacFuelPrices(),
+    getPpacCrude(),
+    getPpacCrudeBalance(),
+  ]);
   const live = ppac ? { postedOn: ppac.postedOn, metros: ppac.metros } : undefined;
   const crudeUsd = crude?.usdPerBbl ?? petro.crude.indianBasketUsdPerBbl;
+  const importPct = balance?.importDependencePct ?? petro.importDependencePct;
+  const importBill = balance?.importBillUsdBn ?? petro.crudeImportBillUsdBn;
+  const balanceFy = balance ? balance.fy.replace("-", "–") : null;
 
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -205,16 +212,33 @@ export default async function PetroleumPage() {
             ) : null}
           </div>
           <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-4">
-            <p className="text-xs text-slate-400">Crude that&apos;s imported</p>
-            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">{petro.importDependencePct}%</p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-slate-400">Crude that&apos;s imported</p>
+              {balance ? (
+                <span className="rounded-full border border-emerald-300/25 bg-emerald-300/[0.07] px-1.5 py-0.5 font-mono text-[0.55rem] uppercase tracking-wide text-emerald-300">
+                  PPAC · {balanceFy}
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-1 font-mono text-3xl font-semibold text-rose-300">{importPct}%</p>
+            {balance ? (
+              <p className="mt-1 text-xs text-slate-500">{balance.indigenousMmt} of {balance.processedMmt} MMT is home-grown</p>
+            ) : null}
           </div>
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
-            <p className="text-xs text-slate-400">Annual crude import bill</p>
-            <p className="mt-1 font-mono text-3xl font-semibold text-white">${petro.crudeImportBillUsdBn}<span className="ml-1 text-sm font-normal text-slate-400">bn</span></p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-slate-400">Annual crude import bill</p>
+              {balance ? (
+                <span className="rounded-full border border-emerald-300/25 bg-emerald-300/[0.07] px-1.5 py-0.5 font-mono text-[0.55rem] uppercase tracking-wide text-emerald-300">
+                  PPAC · {balanceFy}
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-1 font-mono text-3xl font-semibold text-white">${importBill}<span className="ml-1 text-sm font-normal text-slate-400">bn</span></p>
           </div>
         </div>
         <p className="mt-4 text-sm leading-relaxed text-slate-400">
-          India imports about {petro.importDependencePct}% of the crude it refines, so the pump price
+          India imports about {importPct}% of the crude it refines, so the pump price
           and a bill worth tens of billions of dollars ride on global oil and the rupee.{" "}
           {crude
             ? `The Indian Basket is the crude mix India actually buys (sour Oman/Dubai + Brent); PPAC prices it, and $${crude.usdPerBbl}/bbl is its ${crude.month} ${crude.fy.split("-")[0]} monthly average.`
