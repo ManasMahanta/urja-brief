@@ -4,6 +4,13 @@ import ExplainButton from "@/components/urja/ExplainButton";
 import { getCoalStock } from "@/lib/coal";
 import { getGridSnapshot } from "@/lib/grid-live";
 import coalData from "@/data/coal.json";
+import CoalMapLoader from "@/components/coal/CoalMapLoader";
+import CoalDirectory from "@/components/coal/CoalDirectory";
+import coalPlants from "@/data/coal-plants.json";
+import coalMines from "@/data/coal-mines.json";
+import coalFields from "@/data/coalfields.json";
+
+const REGION_ORDER = ["East", "Central", "South", "West", "Northeast"] as const;
 
 export const revalidate = 21600;
 // Cold-cache renders fetch and parse the CEA PDF; give them room.
@@ -249,6 +256,82 @@ export default function CoalPage() {
         <Link href="/renewables" className="mt-3 inline-block text-sm font-semibold text-cyan-300 hover:text-white">
           See what&apos;s winning the percentage on the renewables desk →
         </Link>
+      </section>
+
+      {/* The map — every plant, mapped mines, and the coalfields */}
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">India&apos;s coal map</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            {coalPlants.count} plants · {coalPlants.totalGw} GW
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          Every coal power plant we can place, sized by capacity, over the mapped mines and the major
+          coalfields. Tap a marker for detail; toggle a layer in the legend.
+        </p>
+        <div className="mt-4">
+          <CoalMapLoader
+            plants={coalPlants.plants}
+            mines={coalMines.mines}
+            fields={coalFields.fields}
+          />
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+          Plants: {coalPlants.source} Mines: {coalMines.source} Coalfields: {coalFields.source}
+        </p>
+      </section>
+
+      {/* Plant directory — the full, searchable list */}
+      <section className="urja-panel p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="urja-kicker">Every coal power plant, ranked</p>
+          <p className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+            biggest: {coalPlants.plants[0].name} · {coalPlants.plants[0].mw.toLocaleString("en-IN")} MW
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          {coalPlants.count} plants totalling {coalPlants.totalGw} GW — close to India&apos;s whole
+          coal fleet. Search for a plant or an owner.
+        </p>
+        <div className="mt-4">
+          <CoalDirectory plants={coalPlants.plants} />
+        </div>
+      </section>
+
+      {/* Coalfields directory */}
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">The major coalfields, by region</p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">{coalFields.note}</p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {REGION_ORDER.map((region) => {
+            const fields = coalFields.fields.filter((f) => f.region === region);
+            if (!fields.length) return null;
+            return (
+              <div key={region} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+                <p className="font-mono text-[0.65rem] uppercase tracking-wide text-cyan-200/70">{region} belt</p>
+                <ul className="mt-2 flex flex-col gap-1.5">
+                  {fields.map((f) => (
+                    <li key={f.name} className="flex items-baseline justify-between gap-3 text-sm">
+                      <span className="text-slate-200">
+                        {f.name}
+                        <span className="ml-2 text-xs text-slate-500">{f.state}</span>
+                      </span>
+                      <span className={`shrink-0 font-mono text-[0.65rem] uppercase tracking-wide ${f.type === "Coking coal" ? "text-rose-300/80" : f.type === "Lignite" ? "text-amber-300/80" : f.type === "Tertiary coal" ? "text-sky-300/80" : "text-slate-500"}`}>
+                        {f.type}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-4 border-t border-cyan-100/10 pt-3 text-xs leading-relaxed text-slate-500">
+          Mines shown on the map are {coalMines.count} community-mapped coal quarries from OpenStreetMap —
+          a subset skewed to large surface mines, not a census. Coal India alone runs 300+ mines; many,
+          especially underground, aren&apos;t openly geocoded.
+        </p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
