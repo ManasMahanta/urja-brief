@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import fuel from "@/data/fuel-prices.json";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 // Turns the per-city pump prices into a personal monthly bill and, more usefully,
 // shows how much of that bill is tax — which varies almost entirely by state VAT.
@@ -71,6 +72,11 @@ export default function FuelBill({ live }: { live?: Live }) {
           ))}
         </div>
       </div>
+
+      <PlainEnglish>
+        Tell it your city, how far you drive, and your vehicle&apos;s mileage, and it works out your
+        monthly fuel spend — and how much of that is just tax.
+      </PlainEnglish>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <label className="block">

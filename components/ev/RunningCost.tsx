@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import fuel from "@/data/fuel-prices.json";
 import tariffs from "@/data/tariffs.json";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 // The question every EV buyer actually asks and no station-finder answers:
 // what does a kilometre cost on petrol vs on electricity? Needs no paid fuel
@@ -57,6 +58,10 @@ export default function RunningCost() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Petrol, diesel, CNG, electric — what a kilometre costs</p>
+      <PlainEnglish>
+        What it actually costs to drive one kilometre on each fuel, at your city&apos;s prices — the
+        everyday cost comparison a charging map can&apos;t give you.
+      </PlainEnglish>
       <p className="mt-3 text-sm leading-relaxed text-slate-400">
         A charger is only half the decision; running cost is the other half. This compares fuel and
         electricity at your city&apos;s prices — the comparison a station map can&apos;t make.

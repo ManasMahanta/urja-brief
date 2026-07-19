@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 import CleanHourForecast from "@/components/urja/CleanHourForecast";
 import CostCalculator from "@/components/urja/CostCalculator";
 import EmbedSnippet from "@/components/urja/EmbedSnippet";
@@ -71,6 +72,10 @@ async function CarbonDesk() {
             <span className="live-dot" /> MERIT · fetched {istTime(snapshot.fetchedAt)} IST
           </span>
         </div>
+        <PlainEnglish>
+          How dirty India&apos;s electricity is right now — the amount of climate-warming CO<sub>2</sub>
+          made for each unit of power. Lower is cleaner, and it changes through the day.
+        </PlainEnglish>
 
         <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4">
           <div>
@@ -123,6 +128,10 @@ async function CarbonDesk() {
       {/* #1 — emissions rate + relatable equivalences */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">What the grid is emitting right now</p>
+        <PlainEnglish>
+          The total climate pollution India&apos;s power plants are pumping out this moment, and how much
+          of it comes from coal versus gas.
+        </PlainEnglish>
         <div className="mt-4 flex flex-wrap items-end gap-x-10 gap-y-3">
           <div>
             <p className="text-sm text-slate-400">CO<sub>2</sub> emission rate</p>
@@ -162,6 +171,10 @@ async function CarbonDesk() {
       {/* #4 — marginal vs average */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Average vs marginal — what your extra load really causes</p>
+        <PlainEnglish>
+          If you switch on a heavy appliance right now, the extra electricity almost always comes from
+          a coal plant — so your added pollution is higher than the grid&apos;s average suggests.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Average intensity now</p>
@@ -183,6 +196,10 @@ async function CarbonDesk() {
       {/* #3 — India vs the world */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">India&apos;s grid vs the world</p>
+        <PlainEnglish>
+          How clean or dirty India&apos;s electricity is compared with other countries. India runs dirtier
+          than most because it still leans heavily on coal.
+        </PlainEnglish>
         <p className="mt-2 text-sm text-slate-400">Grid carbon intensity, gCO<sub>2</sub>/kWh — India&apos;s read live, the rest recent averages.</p>
         <div className="mt-4 space-y-1.5">
           {worldRows.map((r) => (

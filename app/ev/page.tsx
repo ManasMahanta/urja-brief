@@ -4,6 +4,7 @@ import EvMapLoader from "@/components/ev/EvMapLoader";
 import RunningCost from "@/components/ev/RunningCost";
 import TcoBreakeven from "@/components/ev/TcoBreakeven";
 import ExplainButton from "@/components/urja/ExplainButton";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 import { countStationsByState, getChargingStations, getIndiaStates, getOfficialCounts } from "@/lib/ev";
 import { getEvHeadlines } from "@/lib/power";
 import ev from "@/data/ev.json";
@@ -46,6 +47,10 @@ async function EvMap() {
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
         <section className="urja-panel p-5">
           <p className="urja-kicker">What the map shows — and what it can&apos;t</p>
+          <PlainEnglish>
+            A map of public EV charging stations we could verify from open sources. A blank area may
+            just mean nobody has mapped it yet — not that there are no chargers there.
+          </PlainEnglish>
           <p className="mt-3 text-sm leading-relaxed text-slate-300">
             <span className="font-mono text-cyan-200">{stations.length.toLocaleString("en-IN")}</span>{" "}
             stations from open sources: {bySource["e-AMRIT"].toLocaleString("en-IN")} from NITI
@@ -174,6 +179,10 @@ export default function EvPage() {
             {ev.adoption.penetrationPct}% of all new vehicles · {ev.asOf}
           </p>
         </div>
+        <PlainEnglish>
+          Who&apos;s really buying electric in India. It&apos;s mostly scooters and auto-rickshaws, not cars —
+          the opposite of what most people picture when they hear &ldquo;EV&rdquo;.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4">
             <p className="text-xs text-slate-400">EV penetration</p>
@@ -215,6 +224,10 @@ export default function EvPage() {
       {/* What EVs mean for the grid — links back to the grid desk */}
       <section className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.05] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-cyan-200">What EVs mean for the grid</p>
+        <PlainEnglish>
+          Every EV needs charging, which is extra demand on the power grid. Today it&apos;s tiny; the real
+          question is whether people charge at busy evening hours or overnight when there&apos;s spare power.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Today&apos;s EV charging load</p>
@@ -242,6 +255,10 @@ export default function EvPage() {
       {/* State EV incentives lookup */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">State EV incentives, side by side</p>
+        <PlainEnglish>
+          Many states sweeten buying an EV with road-tax waivers and cash subsidies. Here&apos;s what each
+          one offers — but always check the state&apos;s own site, as these change often.
+        </PlainEnglish>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[34rem] text-sm">
             <thead>

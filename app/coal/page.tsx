@@ -6,6 +6,7 @@ import { getGridSnapshot } from "@/lib/grid-live";
 import coalData from "@/data/coal.json";
 import CoalMapLoader from "@/components/coal/CoalMapLoader";
 import CoalDirectory from "@/components/coal/CoalDirectory";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 import coalPlants from "@/data/coal-plants.json";
 import coalMines from "@/data/coal-mines.json";
 import coalFields from "@/data/coalfields.json";
@@ -70,6 +71,10 @@ async function CoalDesk() {
             CEA · as on {coal.asOn} ↗
           </a>
         </div>
+        <PlainEnglish>
+          Power plants keep a pile of coal to burn. &ldquo;Days of stock&rdquo; is how many days they could
+          keep running on the coal they have right now — a low number is an early warning of trouble.
+        </PlainEnglish>
 
         <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4">
           <div>
@@ -124,6 +129,10 @@ async function CoalLiveGrip() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Coal&apos;s grip on the grid, right now</p>
+      <PlainEnglish>
+        Of all the electricity India is generating this very moment, this is how much is being made by
+        burning coal — usually most of it.
+      </PlainEnglish>
       <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4">
         <div>
           <p className="text-sm text-slate-400">Power being generated from thermal (overwhelmingly coal)</p>
@@ -184,6 +193,10 @@ export default function CoalPage() {
       {/* Production & self-reliance — the supply side */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Where the fuel comes from</p>
+        <PlainEnglish>
+          India digs up over a billion tonnes of coal a year — most of it by one state-owned giant,
+          Coal India. This is the supply side behind the stock numbers above.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Mined at home a year</p>
@@ -208,6 +221,10 @@ export default function CoalPage() {
       {/* The import paradox */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Why a coal-rich country still imports</p>
+        <PlainEnglish>
+          Even though India has huge coal reserves, it still buys some from abroad — mainly the special
+          &ldquo;coking coal&rdquo; that steelmaking needs, which India barely has.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-4">
             <p className="text-xs text-slate-400">Coal imported a year</p>
@@ -230,6 +247,10 @@ export default function CoalPage() {
       {/* Coal vs the transition — the honest tension */}
       <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-amber-200">Coal vs the transition</p>
+        <PlainEnglish>
+          Two things are true at once: coal&apos;s share of India&apos;s power is slowly shrinking as solar
+          and wind grow, yet India is still building more coal plants to keep the lights on at night.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Coal in generation</p>
@@ -266,6 +287,10 @@ export default function CoalPage() {
             {coalPlants.count} plants · {coalPlants.totalGw} GW
           </p>
         </div>
+        <PlainEnglish>
+          A map of every coal power station in India (bigger dot = bigger plant), the mines that are
+          mapped, and the coalfields the coal is dug from. Tap any dot for details.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
           Every coal power plant we can place, sized by capacity, over the mapped mines and the major
           coalfields. Tap a marker for detail; toggle a layer in the legend.
@@ -290,6 +315,10 @@ export default function CoalPage() {
             biggest: {coalPlants.plants[0].name} · {coalPlants.plants[0].mw.toLocaleString("en-IN")} MW
           </p>
         </div>
+        <PlainEnglish>
+          Every coal power station, listed and ranked by size. &ldquo;MW&rdquo; (megawatts) is how much
+          power it can make at once — the higher the number, the more homes it can supply.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
           {coalPlants.count} plants totalling {coalPlants.totalGw} GW — close to India&apos;s whole
           coal fleet. Search for a plant or an owner.
@@ -302,6 +331,10 @@ export default function CoalPage() {
       {/* Coalfields directory */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">The major coalfields, by region</p>
+        <PlainEnglish>
+          The parts of India where coal is actually found in the ground, grouped by region — from the
+          coking coal that makes steel to the softer coal that&apos;s burnt for power.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">{coalFields.note}</p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {REGION_ORDER.map((region) => {

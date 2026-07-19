@@ -8,6 +8,7 @@ import { getReOutlook, type Strength } from "@/lib/renewables";
 import { getSolarYields } from "@/lib/solar";
 import capacity from "@/data/re-capacity.json";
 import InfraMapLoader from "@/components/urja/InfraMapLoader";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 import CoalDirectory from "@/components/coal/CoalDirectory";
 import solarParks from "@/data/solar-parks.json";
 import windFarms from "@/data/wind-farms.json";
@@ -37,6 +38,10 @@ async function SplitSection() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Estimated solar vs wind — right now</p>
+      <PlainEnglish>
+        Roughly how much of India&apos;s clean power right now is coming from the sun versus the wind.
+        Solar leads by day; wind picks up at night and in the monsoon.
+      </PlainEnglish>
       <div className="mt-4 flex flex-wrap items-end gap-x-10 gap-y-3">
         <div>
           <p className="text-sm text-slate-400">Solar (estimated)</p>
@@ -73,6 +78,10 @@ async function OutlookSection() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Solar &amp; wind outlook</p>
+      <PlainEnglish>
+        A simple read on whether conditions today favour lots of solar and wind power or not — think of
+        it as a weather forecast for clean energy.
+      </PlainEnglish>
       <p className="mt-2 text-sm text-slate-400">How strong the sun and wind — what actually drives renewable output — will be over the coming days.</p>
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {outlook.map((d) => (
@@ -120,6 +129,10 @@ function LeadersSection() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Who&apos;s building the transition</p>
+      <PlainEnglish>
+        Which states have installed the most solar and the most wind. A handful of sunny, windy states
+        do most of India&apos;s clean-energy heavy lifting.
+      </PlainEnglish>
       <p className="mt-2 text-sm text-slate-400">
         National installed capacity: {gw(capacity.nationalMw.solar)} solar, {gw(capacity.nationalMw.wind)} wind.
       </p>
@@ -144,6 +157,10 @@ function TargetTracker() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">500 GW by 2030 — the non-fossil target</p>
+      <PlainEnglish>
+        India has promised to build 500 GW of clean power capacity (solar, wind, hydro, nuclear) by
+        2030. This tracks how far along it is.
+      </PlainEnglish>
       <p className="mt-3 text-sm leading-relaxed text-slate-400">
         India&apos;s headline climate commitment: 500 GW of non-fossil power capacity (renewables +
         hydro + nuclear) by 2030.
@@ -181,6 +198,10 @@ async function YieldRanking() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Where rooftop solar pays back fastest</p>
+      <PlainEnglish>
+        If you put solar panels on your roof, this shows which states get you your money back quickest —
+        because they&apos;re sunnier and their electricity is dearer.
+      </PlainEnglish>
       <p className="mt-2 text-sm text-slate-400">Cities ranked by how many units a kilowatt of panels makes in a year (measured radiation).</p>
       <div className="mt-4 space-y-1.5">
         {ranked.map((c, i) => (
@@ -208,6 +229,10 @@ function CapacityReality() {
   return (
     <section className="urja-panel p-5 sm:p-6">
       <p className="urja-kicker">Capacity vs reality</p>
+      <PlainEnglish>
+        Having lots of solar and wind &ldquo;capacity&rdquo; isn&apos;t the same as power all the time — the
+        sun sets and the wind drops. This explains the gap between what&apos;s built and what it delivers.
+      </PlainEnglish>
       <p className="mt-3 text-sm leading-relaxed text-slate-400">
         Installed capacity isn&apos;t constant output. The sun sets and the wind drops, so a fleet
         averages only a fraction of its nameplate — its capacity factor.
@@ -270,6 +295,10 @@ function InstallationsSection() {
             {solarParks.count} solar parks · {solarParks.totalGw} GW mapped
           </p>
         </div>
+        <PlainEnglish>
+          A map of India&apos;s big solar farms (bigger dot = bigger farm). Wind is harder to map because
+          it&apos;s spread across thousands of separate turbines, not neat farms.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
           Every utility-scale solar park we can place, sized by capacity, with the handful of wind
           farms that are mapped as farms. Tap a marker for detail; toggle a layer in the legend.
@@ -289,6 +318,10 @@ function InstallationsSection() {
             biggest: {solarParks.parks[0].name} · {solarParks.parks[0].mw.toLocaleString("en-IN")} MW
           </p>
         </div>
+        <PlainEnglish>
+          India&apos;s largest solar farms, listed by size. &ldquo;MW&rdquo; (megawatts) is how much power a
+          farm can make — the bigger ones can each power a small city on a sunny day.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
           {solarParks.count} mapped parks totalling {solarParks.totalGw} GW. That is far short of
           India&apos;s ~{Math.round(capacity.nationalMw.solar / 1000)} GW of solar — most of the rest is

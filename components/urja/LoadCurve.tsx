@@ -1,5 +1,6 @@
 import { getLoadCurves, type GridSample } from "@/lib/samples";
 import ExplainButton from "@/components/urja/ExplainButton";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 // Today-vs-yesterday load curve and renewable-share curve, drawn from the
 // 15-minute MERIT samples in data/samples/. Two separate single-axis charts —
@@ -141,6 +142,10 @@ export default async function LoadCurve() {
           MERIT · sampled every 15 min
         </span>
       </div>
+      <PlainEnglish>
+        How India&apos;s power use rises and falls over the day — low overnight, peaking in the evening —
+        with today&apos;s line drawn against yesterday&apos;s for comparison.
+      </PlainEnglish>
       <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-400" aria-hidden="true">
         <span className="inline-flex items-center gap-1.5">
           <span className="inline-block h-0.5 w-5 rounded" style={{ background: TODAY }} /> Today ({todayDate})

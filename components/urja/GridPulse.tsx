@@ -1,5 +1,6 @@
 import { getGridSnapshot, type FuelMix } from "@/lib/grid-live";
 import ExplainButton from "@/components/urja/ExplainButton";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 const FUELS: Array<{ key: keyof FuelMix; label: string; bar: string }> = [
   { key: "thermal", label: "Thermal", bar: "bg-amber-400/80" },
@@ -48,6 +49,10 @@ export default async function GridPulse() {
           <span className="live-dot" /> MERIT · fetched {istTime(snapshot.fetchedAt)} IST
         </span>
       </div>
+      <PlainEnglish>
+        How much electricity the whole country is using this moment, and what&apos;s generating it —
+        coal, gas, hydro, nuclear and renewables. &ldquo;MW&rdquo; is just the size of the power flow.
+      </PlainEnglish>
 
       <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4">
         <div>

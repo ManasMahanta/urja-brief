@@ -1,4 +1,5 @@
 import { getWeatherDemand } from "@/lib/weather";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 const dayLabel = (iso: string, todayIso: string) => {
   if (iso === todayIso) return "Today";
@@ -27,6 +28,10 @@ export default async function WeatherDemand() {
           demand-weighted across 10 load centres
         </span>
       </div>
+      <PlainEnglish>
+        Weather drives power use — hot days mean more air-conditioning and higher demand. This is the
+        temperature trend across India&apos;s big cities and what it means for the grid.
+      </PlainEnglish>
 
       <p className="mt-3 text-sm leading-relaxed text-slate-300">
         Heat drives demand — air-conditioning and pumping load climb with the temperature. Here&apos;s

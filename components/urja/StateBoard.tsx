@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getStatewisePower, stateSlug } from "@/lib/grid-live";
 import ExplainButton from "@/components/urja/ExplainButton";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 const mw = (value: number | null) =>
   value === null ? "—" : Math.round(value).toLocaleString("en-IN");
@@ -33,6 +34,10 @@ export default async function StateBoard() {
           MERIT · instantaneous MW
         </span>
       </div>
+      <PlainEnglish>
+        How much electricity each state is using right now. Tap a state to see how much it makes itself
+        versus buys in from the national grid.
+      </PlainEnglish>
       <div className="mt-5 overflow-x-auto">
         <table className="w-full min-w-[34rem] text-sm">
           <thead>

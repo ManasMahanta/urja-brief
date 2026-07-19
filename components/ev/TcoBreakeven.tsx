@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import fuel from "@/data/fuel-prices.json";
 import tariffs from "@/data/tariffs.json";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 // The question RunningCost stops short of: an EV costs more to buy — how long
 // until the fuel saving pays that premium back? Same city-price + state-tariff
@@ -71,6 +72,11 @@ export default function TcoBreakeven() {
           ))}
         </div>
       </div>
+
+      <PlainEnglish>
+        An EV is cheaper to run but pricier to buy. This works out how many months of fuel savings it
+        takes to make up that higher sticker price.
+      </PlainEnglish>
 
       <p className="mt-3 text-sm leading-relaxed text-slate-400">
         An EV saves on fuel but costs more upfront. Enter the price gap and your driving to see how

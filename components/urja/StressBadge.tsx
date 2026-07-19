@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getGridStress, type StressLevel } from "@/lib/stress";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 const TONE: Record<StressLevel, { ring: string; text: string; dot: string }> = {
   calm: { ring: "border-emerald-300/25 bg-emerald-300/[0.06]", text: "text-emerald-300", dot: "bg-emerald-400" },
@@ -23,6 +24,10 @@ export default async function StressBadge() {
           </span>
         )}
       </div>
+      <PlainEnglish>
+        A quick read on how hard the grid is working right now — the closer demand gets to the most
+        the grid has recently had to supply, the tighter things are.
+      </PlainEnglish>
       <p className={`mt-3 inline-flex items-center gap-2 text-lg font-semibold ${tone.text}`}>
         <span className={`h-2.5 w-2.5 rounded-full ${tone.dot}`} aria-hidden="true" />
         {stress.headline}

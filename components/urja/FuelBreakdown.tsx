@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import fuel from "@/data/fuel-prices.json";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 
 // "Where does your ₹100 of petrol go?" — the transparency breakdown. Base price,
 // dealer commission, and central excise are near-uniform nationwide; the pump
@@ -61,6 +62,11 @@ export default function FuelBreakdown({ live }: { live?: Live }) {
           ))}
         </div>
       </div>
+
+      <PlainEnglish>
+        Split the price of one litre into its parts. More than half of what you pay is tax — pick your
+        city to see how much.
+      </PlainEnglish>
 
       <label className="mt-4 block max-w-xs">
         <span className="font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">City</span>

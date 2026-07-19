@@ -2,6 +2,7 @@ import Link from "next/link";
 import FuelBreakdown from "@/components/urja/FuelBreakdown";
 import FuelBill from "@/components/urja/FuelBill";
 import InfraMapLoader from "@/components/urja/InfraMapLoader";
+import PlainEnglish from "@/components/urja/PlainEnglish";
 import CoalDirectory from "@/components/coal/CoalDirectory";
 import petro from "@/data/petroleum.json";
 import oilGas from "@/data/oil-gas.json";
@@ -53,6 +54,10 @@ function OilGasSection() {
             {oilGas.refineries.length} refineries · ~{totalRefiningMmtpa} MMTPA
           </p>
         </div>
+        <PlainEnglish>
+          Where India actually turns crude oil into petrol and diesel (refineries), where imported
+          gas arrives by ship (LNG terminals), and the few places India digs up its own oil.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
           The physical petroleum system: refineries sized by capacity, the LNG import terminals where
           gas lands, and the domestic fields the ~12% home-grown crude comes from. Tap a marker;
@@ -71,6 +76,10 @@ function OilGasSection() {
             biggest: {refineriesByCap[0].name} · {refineriesByCap[0].mmtpa} MMTPA
           </p>
         </div>
+        <PlainEnglish>
+          Every plant that turns crude oil into fuel, ranked by size. &ldquo;MMTPA&rdquo; just means how
+          many million tonnes of crude it can process in a year — bigger number, bigger refinery.
+        </PlainEnglish>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">{oilGas.refineriesNote}</p>
         <div className="mt-4">
           <CoalDirectory plants={dirRows} noun="refineries" unit="MMTPA" placeholder="Search a refinery or operator — e.g. Jamnagar, IOCL, Paradip" />
@@ -142,6 +151,10 @@ export default async function PetroleumPage() {
               PPAC · as on {ppac.postedOn} ↗
             </a>
           </div>
+          <PlainEnglish>
+            What a litre of petrol and diesel actually costs at the pump today in India&apos;s four big
+            cities, taken straight from the government&apos;s official price sheet.
+          </PlainEnglish>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(ppac.metros) as Array<keyof typeof ppac.metros>).map((city) => (
               <div key={city} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
@@ -177,6 +190,10 @@ export default async function PetroleumPage() {
       {/* Tax revenue — the aggregate of every litre's tax */}
       <section className="rounded-2xl border border-rose-400/20 bg-rose-400/[0.05] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-rose-200">What the tax adds up to</p>
+        <PlainEnglish>
+          Add up the tax on every litre sold across the country and this is how much money the
+          government collects from fuel each year — one of its biggest single sources of income.
+        </PlainEnglish>
         <p className="mt-3 text-lg leading-relaxed text-slate-200">
           Across every litre sold, petroleum taxes raise roughly{" "}
           <span className="font-mono font-semibold text-rose-200">₹{lakhCrore(petro.taxRevenue.totalCrore)} lakh crore a year</span>{" "}
@@ -189,6 +206,10 @@ export default async function PetroleumPage() {
       {/* #2 — crude & import dependence */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Crude oil &amp; India&apos;s import dependence</p>
+        <PlainEnglish>
+          India barely produces any oil of its own, so it buys almost all of it from other countries.
+          This is what that crude costs, how much of it is imported, and the yearly bill for buying it.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <div className="flex items-center justify-between gap-2">
@@ -254,6 +275,10 @@ export default async function PetroleumPage() {
             Russia was {petro.importSources.russiaPreWarPct}% before 2022
           </p>
         </div>
+        <PlainEnglish>
+          Which countries India&apos;s oil comes from. The big shift: since 2022 India buys most of its
+          oil from Russia at a discount, when earlier it barely bought any.
+        </PlainEnglish>
         <div className="mt-4 flex flex-col gap-2">
           {petro.importSources.sources.map((s) => (
             <div key={s.country} className="flex items-center gap-3 text-sm">
@@ -280,6 +305,10 @@ export default async function PetroleumPage() {
       {/* India the refiner & exporter — the untold half */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">India imports crude, exports fuel</p>
+        <PlainEnglish>
+          India buys raw crude oil, refines it into petrol and diesel at huge scale, and then sells a
+          lot of that finished fuel to other countries — refining is one of India&apos;s big earners.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Refining capacity</p>
@@ -307,6 +336,10 @@ export default async function PetroleumPage() {
       {/* Strategic reserve — days of cover */}
       <section className="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.05] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-cyan-200">If imports stopped tomorrow</p>
+        <PlainEnglish>
+          India keeps an emergency oil stockpile in case supplies from abroad ever get cut off. This
+          is roughly how many days the country could keep going on the oil it has stored.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Strategic reserve</p>
@@ -333,6 +366,10 @@ export default async function PetroleumPage() {
       {/* Ethanol blending — the import-cutting policy story */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">Ethanol blending (E20)</p>
+        <PlainEnglish>
+          India mixes ethanol (alcohol made from sugarcane and grain) into petrol. Every litre of
+          ethanol is a litre of crude India doesn&apos;t have to import — E20 means a 20% mix.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-emerald-300/20 bg-emerald-300/[0.05] p-4">
             <p className="text-xs text-slate-400">Ethanol in petrol</p>
@@ -356,6 +393,10 @@ export default async function PetroleumPage() {
       {/* #4 — prices frozen watch + rise fast, fall slow */}
       <section className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 sm:p-6">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-amber-200">Rise fast, fall slow</p>
+        <PlainEnglish>
+          Pump prices tend to jump quickly when global oil gets dearer but come down only slowly when
+          it gets cheaper. This shows how long it&apos;s been since prices actually changed.
+        </PlainEnglish>
         <p className="mt-3 text-lg leading-relaxed text-slate-200">
           It&apos;s been{" "}
           <span className="font-mono font-semibold text-amber-200">{daysSinceRevision.toLocaleString("en-IN")} days</span>{" "}
@@ -368,6 +409,10 @@ export default async function PetroleumPage() {
       {/* #4 — LPG */}
       <section className="urja-panel p-5 sm:p-6">
         <p className="urja-kicker">LPG &amp; cooking fuel</p>
+        <PlainEnglish>
+          What a household cooking-gas cylinder costs, and how much poorer families get back as a
+          government subsidy under the Ujjwala scheme.
+        </PlainEnglish>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
             <p className="text-xs text-slate-400">Domestic cylinder ({petro.lpg.cylinderKg} kg)</p>
