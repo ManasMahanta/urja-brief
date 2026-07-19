@@ -1,0 +1,37 @@
+{
+  "asOf": "2026",
+  "source": "Vahan (MoRTH) / FADA / state EV policies — approximate, dated reference (no clean free live feed exists; registration and policy data shift constantly)",
+  "adoption": {
+    "penetrationPct": 7.4,
+    "annualUnitsLakh": 19,
+    "cumulativeFleetLakh": 55,
+    "categories": [
+      { "segment": "Two-wheelers", "salesSharePct": 58, "penetrationPct": 6, "accent": "cyan" },
+      { "segment": "Three-wheelers", "salesSharePct": 34, "penetrationPct": 20, "accent": "emerald" },
+      { "segment": "Cars (4-wheeler)", "salesSharePct": 6, "penetrationPct": 2.5, "accent": "slate" },
+      { "segment": "Buses & others", "salesSharePct": 2, "penetrationPct": 4, "accent": "slate" }
+    ],
+    "note": "India's EV story is a two- and three-wheeler story: 2W and 3W together are ~90% of every EV sold, while electric cars are still a small slice. Three-wheelers (e-rickshaws) already run around one in five new sales. Shares move month to month — this is a recent reference, not a live feed.",
+    "why": "The picture most people carry — EV means an electric car — is upside down for India. Cheap electric scooters and e-rickshaws are electrifying first because the running-cost saving matters most where margins are thinnest."
+  },
+  "gridLoad": {
+    "fleetTwhPerYear": 8,
+    "shareOfDemandPct": 0.5,
+    "scenarioTwoWheelerSharePct": 30,
+    "scenarioAddedTwhPerYear": 38,
+    "scenarioAddedGwAvg": 4.3,
+    "note": "Illustrative. Today's ~55 lakh EVs — mostly light 2W and 3W — draw on the order of 8 TWh a year, well under 1% of India's electricity. A scenario where 30% of the ~250 million two-wheeler fleet went electric would add roughly 38 TWh a year, about 4–5 GW of average load. Assumes ~500 kWh/year per electric two-wheeler and typical usage.",
+    "why": "EVs are still a rounding error on the grid, so the fear isn't total energy — it's when they charge. Millions plugging in at 7pm would deepen the evening peak; the same millions charging overnight would fill the belly of the duck curve instead. Managed charging, not raw capacity, is the real question."
+  },
+  "incentives": [
+    { "state": "Delhi", "roadTax": "Waived", "subsidy": "₹5,000/kWh (2W, up to ₹30k); ₹10k/kWh cars", "accent": "emerald" },
+    { "state": "Maharashtra", "roadTax": "Waived", "subsidy": "₹5,000/kWh; early-bird top-ups", "accent": "emerald" },
+    { "state": "Gujarat", "roadTax": "Waived", "subsidy": "₹10,000/kWh (2W up to ₹20k)", "accent": "emerald" },
+    { "state": "Tamil Nadu", "roadTax": "100% waived", "subsidy": "Manufacturing-led; limited demand subsidy", "accent": "cyan" },
+    { "state": "Karnataka", "roadTax": "Exempt", "subsidy": "Focus on charging + manufacturing", "accent": "cyan" },
+    { "state": "Rajasthan", "roadTax": "Waived", "subsidy": "Per-kWh grant (battery capacity)", "accent": "emerald" },
+    { "state": "Telangana", "roadTax": "Waived (early buyers)", "subsidy": "Road-tax + registration waiver", "accent": "cyan" },
+    { "state": "Uttar Pradesh", "roadTax": "Waived", "subsidy": "Purchase subsidy for early buyers", "accent": "emerald" }
+  ],
+  "incentivesNote": "State EV policies change often, run in phases, and cap total payouts — several have lapsed or are being redrafted. Treat this as a reference of the general shape of each state's support, not a live entitlement. Always confirm on the state's own EV-policy portal before buying."
+}

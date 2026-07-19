@@ -248,7 +248,9 @@ export default function RenewablesPage() {
       </section>
 
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><SplitSection /></Suspense>
-      <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><DuckCurve /></Suspense>
+      <div id="duck" className="scroll-mt-24">
+        <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><DuckCurve /></Suspense>
+      </div>
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><OutlookSection /></Suspense>
       <Suspense fallback={<div className="urja-panel h-64 animate-pulse" />}><RooftopSection /></Suspense>
       <Suspense fallback={<div className="urja-panel h-40 animate-pulse" />}><YieldRanking /></Suspense>
