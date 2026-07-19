@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getRecords, getRecentRollups } from "@/lib/samples";
+import RecordsTrend from "@/components/urja/RecordsTrend";
 
 export const revalidate = 900;
 
@@ -20,31 +21,53 @@ const istStamp = (iso: string) =>
     minute: "2-digit",
   });
 
+// How long a record has stood, in whole days (0 = set today).
+const ageLabel = (iso: string) => {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  return days <= 0 ? "set today" : days === 1 ? "stood 1 day" : `stood ${days} days`;
+};
+
 export default async function RecordsPage() {
   const [records, rollups] = await Promise.all([getRecords(), getRecentRollups()]);
+
+  // The overnight trough — the lowest demand the sampler caught, from the
+  // rollups (no separate stored record needed).
+  const troughDay = rollups.length
+    ? rollups.reduce((lo, d) => (d.minMw < lo.minMw ? d : lo))
+    : null;
 
   const cards = [
     records.peakDemandMw && {
       label: "Highest demand met we've observed",
       value: mw(records.peakDemandMw.value),
       when: istStamp(records.peakDemandMw.t),
+      age: ageLabel(records.peakDemandMw.t),
+    },
+    troughDay && {
+      label: "Lowest demand we've observed (overnight trough)",
+      value: mw(troughDay.minMw),
+      when: `${troughDay.date}`,
+      age: null,
     },
     records.maxRePct && {
       label: "Highest renewables' share of generation",
       value: `${records.maxRePct.value.toFixed(1)}%`,
       when: istStamp(records.maxRePct.t),
+      age: ageLabel(records.maxRePct.t),
     },
     records.maxRenewableMw && {
       label: "Most renewable power flowing at once",
       value: mw(records.maxRenewableMw.value),
       when: istStamp(records.maxRenewableMw.t),
+      age: ageLabel(records.maxRenewableMw.t),
     },
     records.maxStorageMw && {
       label: "Most storage despatch at once",
       value: mw(records.maxStorageMw.value),
       when: istStamp(records.maxStorageMw.t),
+      age: ageLabel(records.maxStorageMw.t),
     },
-  ].filter(Boolean) as Array<{ label: string; value: string; when: string }>;
+  ].filter(Boolean) as Array<{ label: string; value: string; when: string; age: string | null }>;
 
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -70,7 +93,10 @@ export default async function RecordsPage() {
             <article key={card.label} className="urja-panel p-5">
               <p className="text-sm text-slate-400">{card.label}</p>
               <p className="mt-2 font-mono text-3xl font-semibold text-white">{card.value}</p>
-              <p className="mt-2 font-mono text-xs text-cyan-200/70">{card.when} IST</p>
+              <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-cyan-200/70">
+                {card.when} IST
+                {card.age ? <span className="rounded-full border border-cyan-200/15 px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wide text-slate-400">{card.age}</span> : null}
+              </p>
             </article>
           ))}
         </section>
@@ -81,6 +107,10 @@ export default async function RecordsPage() {
             backfilled or estimated.
           </p>
         </section>
+      )}
+
+      {rollups.length >= 2 && (
+        <RecordsTrend rows={rollups.map((r) => ({ date: r.date, peakMw: r.peakMw, maxRePct: r.maxRePct, samples: r.samples }))} />
       )}
 
       <section className="urja-panel p-5 sm:p-6">

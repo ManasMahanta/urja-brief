@@ -18,8 +18,37 @@ const RESULT: Record<Resolved["result"], { label: string; ring: string; text: st
   pending: { label: "Open", ring: "border-cyan-200/15 bg-slate-950/40", text: "text-cyan-200", dot: "bg-cyan-300" },
 };
 
+const METRIC_LABEL: Record<Resolved["metric"], string> = {
+  peakDemandMw: "Peak demand",
+  maxRePct: "Renewable share",
+};
+
+// Whole days from now (IST) until a resolve date; negative once it's passed.
+const daysUntil = (isoDate: string) =>
+  Math.ceil((new Date(`${isoDate}T18:30:00Z`).getTime() - Date.now()) / 86_400_000);
+
 export default async function ScoreboardPage() {
   const { forecasts, tally } = await getScoreboard();
+
+  // Hit-rate split by metric — are we better at demand or renewables calls?
+  const byMetric = (Object.keys(METRIC_LABEL) as Resolved["metric"][]).map((metric) => {
+    const settled = forecasts.filter((f) => f.metric === metric && f.result !== "pending");
+    const hit = settled.filter((f) => f.result === "hit").length;
+    return { metric, label: METRIC_LABEL[metric], hit, total: settled.length };
+  });
+
+  // Current streak: consecutive same-result settled calls, newest first.
+  const settledNewestFirst = forecasts.filter((f) => f.result !== "pending");
+  let streak = 0;
+  let streakKind: "hit" | "miss" | null = null;
+  for (const f of settledNewestFirst) {
+    if (streakKind === null) {
+      streakKind = f.result as "hit" | "miss";
+      streak = 1;
+    } else if (f.result === streakKind) {
+      streak += 1;
+    } else break;
+  }
 
   return (
     <div className="flex flex-col gap-12 pb-8">
@@ -63,6 +92,32 @@ export default async function ScoreboardPage() {
         </article>
       </section>
 
+      <section className="urja-panel p-5 sm:p-6">
+        <p className="urja-kicker">Track record, broken down</p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {byMetric.map((m) => (
+            <div key={m.metric} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+              <p className="text-xs text-slate-400">{m.label} calls</p>
+              <p className="mt-1 font-mono text-2xl font-semibold text-white">
+                {m.total === 0 ? "—" : `${m.hit}/${m.total}`}
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                {m.total === 0 ? "none settled yet" : `${Math.round((m.hit / m.total) * 100)}% right`}
+              </p>
+            </div>
+          ))}
+          <div className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+            <p className="text-xs text-slate-400">Current streak</p>
+            <p className={`mt-1 font-mono text-2xl font-semibold ${streakKind === "hit" ? "text-emerald-300" : streakKind === "miss" ? "text-rose-300" : "text-white"}`}>
+              {streakKind === null ? "—" : `${streak} ${streakKind === "hit" ? "hit" : "miss"}${streak === 1 ? "" : streakKind === "hit" ? "s" : "es"}`}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              {streakKind === null ? "no calls settled yet" : "in a row, most recent first"}
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="flex flex-col gap-4">
         {forecasts.length ? (
           forecasts.map((f) => {
@@ -78,12 +133,21 @@ export default async function ScoreboardPage() {
                     </span>
                   </div>
                   <span className="flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-wide text-slate-500">
+                    {f.ai && (
+                      <span className="rounded border border-fuchsia-300/30 bg-fuchsia-300/10 px-1.5 py-0.5 text-fuchsia-200">AI</span>
+                    )}
                     {f.auto && (
                       <span className="rounded border border-cyan-200/20 px-1.5 py-0.5 text-cyan-200/70">auto</span>
                     )}
                     Made {f.madeOn} · {f.horizon}
                   </span>
                 </div>
+                {f.ai && (
+                  <p className="mt-2 text-xs leading-relaxed text-fuchsia-200/80">
+                    This call was written by the site&apos;s AI, not a human — and it&apos;s graded by the
+                    same sampling as every other. An AI that has to live with its own record.
+                  </p>
+                )}
 
                 <p className="mt-3 text-lg font-semibold leading-snug text-white">{f.claim}</p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-400">{f.basis}</p>
@@ -99,6 +163,15 @@ export default async function ScoreboardPage() {
                     Best observed{" "}
                     <span className={r.text}>{f.observed !== null ? fmt(f.metric, f.observed) : "no data yet"}</span>
                   </span>
+                  {f.result === "pending" && (() => {
+                    const d = daysUntil(f.resolvesOn);
+                    return (
+                      <span className="text-slate-400">
+                        Resolves{" "}
+                        <span className="text-cyan-200">{d <= 0 ? "today" : d === 1 ? "tomorrow" : `in ${d} days`}</span>
+                      </span>
+                    );
+                  })()}
                 </div>
                 {f.note && <p className="mt-2 text-xs text-slate-500">{f.note}</p>}
               </article>

@@ -32,5 +32,17 @@
   "metric": "peakDemandMw",
   "direction": "above",
   "target": 269000
+ },
+ {
+  "id": "ai-2026-W29",
+  "ai": true,
+  "madeOn": "2026-07-19",
+  "horizon": "By 2026-07-26",
+  "claim": "India's grid peak demand will exceed 275 GW at least once in the next 7 days.",
+  "basis": "AI call (GLM): a recent peak of 269 GW combined with persistent monsoon humidity keeps pushing cooling and industrial load up, so a fresh high above 275 GW is likely.",
+  "resolvesOn": "2026-07-26",
+  "metric": "peakDemandMw",
+  "direction": "above",
+  "target": 275000
  }
 ]
