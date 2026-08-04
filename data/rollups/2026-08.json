@@ -30,8 +30,8 @@
  "2026-08-05": {
   "peakMw": 220843,
   "peakT": "2026-08-04T18:52:09.326Z",
-  "minMw": 220843,
-  "maxRePct": 9.2,
-  "samples": 1
+  "minMw": 211733,
+  "maxRePct": 9.33,
+  "samples": 2
  }
 }
