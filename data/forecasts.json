@@ -92,5 +92,17 @@
   "metric": "peakDemandMw",
   "direction": "above",
   "target": 244000
+ },
+ {
+  "id": "auto-peak-2026-W34",
+  "auto": true,
+  "madeOn": "2026-08-17",
+  "horizon": "By 2026-08-24",
+  "claim": "All-India demand met tops 247 GW at least once in the next 7 days.",
+  "basis": "Auto-generated from our sampling: daily peaks have reached about 247 GW over the last two weeks, so a similar high in the week ahead is the call.",
+  "resolvesOn": "2026-08-24",
+  "metric": "peakDemandMw",
+  "direction": "above",
+  "target": 247000
  }
 ]
