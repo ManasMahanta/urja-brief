@@ -1,0 +1,16 @@
+[
+ {
+  "t": "2026-08-20T18:51:00.732Z",
+  "demandMw": 231396,
+  "mix": {
+   "thermal": 168393,
+   "gas": 4213,
+   "nuclear": 5521,
+   "hydro": 30474,
+   "renewable": 20606,
+   "storage": 4041,
+   "other": 1920
+  },
+  "rePct": 8.76
+ }
+]
