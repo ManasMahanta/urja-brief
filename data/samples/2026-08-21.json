@@ -376,5 +376,19 @@
    "other": 1806
   },
   "rePct": 10.81
+ },
+ {
+  "t": "2026-08-21T14:43:16.712Z",
+  "demandMw": 245138,
+  "mix": {
+   "thermal": 169924,
+   "gas": 5746,
+   "nuclear": 5633,
+   "hydro": 34253,
+   "renewable": 26156,
+   "storage": 4496,
+   "other": 1890
+  },
+  "rePct": 10.54
  }
 ]
