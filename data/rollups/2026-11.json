@@ -42,10 +42,10 @@
   "samples": 4
  },
  "2026-11-08": {
-  "peakMw": 168781,
-  "peakT": "2026-11-07T23:48:20.605Z",
+  "peakMw": 192679,
+  "peakT": "2026-11-08T04:42:51.636Z",
   "minMw": 160800,
-  "maxRePct": 4.98,
-  "samples": 2
+  "maxRePct": 36.11,
+  "samples": 3
  }
 }
